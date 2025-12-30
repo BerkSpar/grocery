@@ -40,6 +40,18 @@ class AppDatabase extends _$AppDatabase {
     )..where((cart) => cart.finishedAt.isNull())).getSingleOrNull();
   }
 
+  Stream<double> watchOpenCartTotalPrice() async* {
+    var currentCartId = await getOpenCart();
+
+    if (currentCartId?.id == null) yield 0;
+
+    yield* (selectOnly(cartItem)
+          ..addColumns([cartItem.price.sum()])
+          ..where(cartItem.cartId.equals(currentCartId!.id)))
+        .watchSingle()
+        .map((row) => row.read(cartItem.price.sum()) ?? 0.0);
+  }
+
   Future<List<CartData?>> getCarts() {
     return (select(cart)..where((cart) => cart.finishedAt.isNotNull())).get();
   }
