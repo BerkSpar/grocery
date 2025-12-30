@@ -16,10 +16,15 @@ class CartDAO {
     return _database.watchPreCartItems();
   }
 
-  Future<int> createPreCartItem(String name, quantity, emoji) async {
+  Future<int> createPreCartItem({
+    required String name,
+    required String quantity,
+    required String emoji,
+  }) async {
     return await _database.createPreCartItem(
       CartItemCompanion(
         name: Value(name),
+        price: Value(0.0),
         quantity: Value(quantity),
         emoji: Value(emoji),
       ),
@@ -34,7 +39,7 @@ class CartDAO {
     var currentCart = await _database.getOpenCart();
 
     if (currentCart != null) {
-      return currentCart;
+      throw Exception("A cart is already opened");
     }
 
     await _database.createCart();
@@ -51,6 +56,7 @@ class CartDAO {
   void createNewItemToOpenCart(
     String name,
     String quantity,
+    double price,
     String emoji,
     String barCode,
     bool checked,
@@ -60,6 +66,7 @@ class CartDAO {
     CartItemCompanion newItem = CartItemCompanion(
       cartId: Value(currentCart!.id),
       name: Value(name),
+      price: Value(price),
       quantity: Value(quantity),
       emoji: Value(emoji),
       barCode: Value(barCode),

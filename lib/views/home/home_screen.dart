@@ -13,7 +13,11 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   void createNewItem() async {
-    await context.read<CartDAO>().createPreCartItem('Pizza', '12un', '🍕');
+    await context.read<CartDAO>().createPreCartItem(
+      name: 'Pizza',
+      quantity: '12un',
+      emoji: '🍕',
+    );
   }
 
   void toggleCartItem(int cartItemId) {
