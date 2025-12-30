@@ -35,6 +35,10 @@ class CartDAO {
     return await _database.getOpenCart();
   }
 
+  Stream<double> watchOpenCartTotalPrice() {
+    return _database.watchOpenCartTotalPrice();
+  }
+
   Future<CartData?> createCart() async {
     var currentCart = await _database.getOpenCart();
 
