@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class NeoCard extends StatefulWidget {
   final Color backgroundColor;
@@ -34,6 +35,7 @@ class _NeoCardState extends State<NeoCard> {
       onTapUp: widget.onTap != null
           ? (_) {
               setState(() => _isPressed = false);
+              HapticFeedback.selectionClick();
               widget.onTap?.call();
             }
           : null,

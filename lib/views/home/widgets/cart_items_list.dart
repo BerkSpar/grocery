@@ -73,6 +73,7 @@ class CartItemsList extends StatelessWidget {
             const SizedBox(height: 16),
             Expanded(
               child: ListView.separated(
+                padding: EdgeInsets.only(bottom: 120),
                 itemBuilder: (_, index) {
                   final item = items[index];
 

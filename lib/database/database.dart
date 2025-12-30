@@ -26,11 +26,17 @@ class AppDatabase extends _$AppDatabase {
   }
 
   Future<List<CartItemData>> getPreCartItems() {
-    return (select(cartItem)..where((item) => item.cartId.isNull())).get();
+    return (select(cartItem)
+          ..where((item) => item.cartId.isNull())
+          ..orderBy([(item) => OrderingTerm.desc(item.createdAt)]))
+        .get();
   }
 
   Stream<List<CartItemData>> watchPreCartItems() {
-    return (select(cartItem)..where((item) => item.cartId.isNull())).watch();
+    return (select(cartItem)
+          ..where((item) => item.cartId.isNull())
+          ..orderBy([(item) => OrderingTerm.desc(item.createdAt)]))
+        .watch();
   }
 
   Future<int> createCart() async {
