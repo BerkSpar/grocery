@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:grocery/app_widget.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
+void main() {
   runApp(const GroceryApp());
 }

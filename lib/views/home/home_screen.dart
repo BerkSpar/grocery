@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grocery/daos/cart_dao.dart';
 import 'package:grocery/views/home/widgets/cart_home_summary.dart';
 import 'package:grocery/views/home/widgets/cart_items_list.dart';
+import 'package:grocery/views/home/widgets/create_cart_item_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -12,11 +13,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  void createNewItem() async {
-    await context.read<CartDAO>().createPreCartItem(
-      name: 'Pizza',
-      quantity: '12un',
-      emoji: '🍕',
+  void createNewCartItem() async {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return CreateCartItemBottomSheet();
+      },
     );
   }
 
@@ -42,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
               builder: (context, stream) {
                 return CartItemsList(
                   items: stream.data ?? [],
-                  onAddNewItem: createNewItem,
+                  onAddNewItem: createNewCartItem,
                   onItemToggled: toggleCartItem,
                 );
               },
