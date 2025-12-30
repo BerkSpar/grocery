@@ -354,10 +354,19 @@ class $CartItemTable extends CartItem
   );
   @override
   late final GeneratedColumn<String> quantity = GeneratedColumn<String>(
-    'body',
+    'quantity',
     aliasedName,
     false,
     type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _priceMeta = const VerificationMeta('price');
+  @override
+  late final GeneratedColumn<double> price = GeneratedColumn<double>(
+    'price',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
     requiredDuringInsert: true,
   );
   static const VerificationMeta _emojiMeta = const VerificationMeta('emoji');
@@ -417,6 +426,7 @@ class $CartItemTable extends CartItem
     cartId,
     name,
     quantity,
+    price,
     emoji,
     barCode,
     checked,
@@ -451,13 +461,21 @@ class $CartItemTable extends CartItem
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
-    if (data.containsKey('body')) {
+    if (data.containsKey('quantity')) {
       context.handle(
         _quantityMeta,
-        quantity.isAcceptableOrUnknown(data['body']!, _quantityMeta),
+        quantity.isAcceptableOrUnknown(data['quantity']!, _quantityMeta),
       );
     } else if (isInserting) {
       context.missing(_quantityMeta);
+    }
+    if (data.containsKey('price')) {
+      context.handle(
+        _priceMeta,
+        price.isAcceptableOrUnknown(data['price']!, _priceMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_priceMeta);
     }
     if (data.containsKey('emoji')) {
       context.handle(
@@ -508,7 +526,11 @@ class $CartItemTable extends CartItem
       )!,
       quantity: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
-        data['${effectivePrefix}body'],
+        data['${effectivePrefix}quantity'],
+      )!,
+      price: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}price'],
       )!,
       emoji: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
@@ -540,6 +562,7 @@ class CartItemData extends DataClass implements Insertable<CartItemData> {
   final int? cartId;
   final String name;
   final String quantity;
+  final double price;
   final String emoji;
   final String? barCode;
   final bool checked;
@@ -549,6 +572,7 @@ class CartItemData extends DataClass implements Insertable<CartItemData> {
     this.cartId,
     required this.name,
     required this.quantity,
+    required this.price,
     required this.emoji,
     this.barCode,
     required this.checked,
@@ -562,7 +586,8 @@ class CartItemData extends DataClass implements Insertable<CartItemData> {
       map['cart_id'] = Variable<int>(cartId);
     }
     map['name'] = Variable<String>(name);
-    map['body'] = Variable<String>(quantity);
+    map['quantity'] = Variable<String>(quantity);
+    map['price'] = Variable<double>(price);
     map['emoji'] = Variable<String>(emoji);
     if (!nullToAbsent || barCode != null) {
       map['bar_code'] = Variable<String>(barCode);
@@ -580,6 +605,7 @@ class CartItemData extends DataClass implements Insertable<CartItemData> {
           : Value(cartId),
       name: Value(name),
       quantity: Value(quantity),
+      price: Value(price),
       emoji: Value(emoji),
       barCode: barCode == null && nullToAbsent
           ? const Value.absent()
@@ -599,6 +625,7 @@ class CartItemData extends DataClass implements Insertable<CartItemData> {
       cartId: serializer.fromJson<int?>(json['cartId']),
       name: serializer.fromJson<String>(json['name']),
       quantity: serializer.fromJson<String>(json['quantity']),
+      price: serializer.fromJson<double>(json['price']),
       emoji: serializer.fromJson<String>(json['emoji']),
       barCode: serializer.fromJson<String?>(json['barCode']),
       checked: serializer.fromJson<bool>(json['checked']),
@@ -613,6 +640,7 @@ class CartItemData extends DataClass implements Insertable<CartItemData> {
       'cartId': serializer.toJson<int?>(cartId),
       'name': serializer.toJson<String>(name),
       'quantity': serializer.toJson<String>(quantity),
+      'price': serializer.toJson<double>(price),
       'emoji': serializer.toJson<String>(emoji),
       'barCode': serializer.toJson<String?>(barCode),
       'checked': serializer.toJson<bool>(checked),
@@ -625,6 +653,7 @@ class CartItemData extends DataClass implements Insertable<CartItemData> {
     Value<int?> cartId = const Value.absent(),
     String? name,
     String? quantity,
+    double? price,
     String? emoji,
     Value<String?> barCode = const Value.absent(),
     bool? checked,
@@ -634,6 +663,7 @@ class CartItemData extends DataClass implements Insertable<CartItemData> {
     cartId: cartId.present ? cartId.value : this.cartId,
     name: name ?? this.name,
     quantity: quantity ?? this.quantity,
+    price: price ?? this.price,
     emoji: emoji ?? this.emoji,
     barCode: barCode.present ? barCode.value : this.barCode,
     checked: checked ?? this.checked,
@@ -645,6 +675,7 @@ class CartItemData extends DataClass implements Insertable<CartItemData> {
       cartId: data.cartId.present ? data.cartId.value : this.cartId,
       name: data.name.present ? data.name.value : this.name,
       quantity: data.quantity.present ? data.quantity.value : this.quantity,
+      price: data.price.present ? data.price.value : this.price,
       emoji: data.emoji.present ? data.emoji.value : this.emoji,
       barCode: data.barCode.present ? data.barCode.value : this.barCode,
       checked: data.checked.present ? data.checked.value : this.checked,
@@ -659,6 +690,7 @@ class CartItemData extends DataClass implements Insertable<CartItemData> {
           ..write('cartId: $cartId, ')
           ..write('name: $name, ')
           ..write('quantity: $quantity, ')
+          ..write('price: $price, ')
           ..write('emoji: $emoji, ')
           ..write('barCode: $barCode, ')
           ..write('checked: $checked, ')
@@ -673,6 +705,7 @@ class CartItemData extends DataClass implements Insertable<CartItemData> {
     cartId,
     name,
     quantity,
+    price,
     emoji,
     barCode,
     checked,
@@ -686,6 +719,7 @@ class CartItemData extends DataClass implements Insertable<CartItemData> {
           other.cartId == this.cartId &&
           other.name == this.name &&
           other.quantity == this.quantity &&
+          other.price == this.price &&
           other.emoji == this.emoji &&
           other.barCode == this.barCode &&
           other.checked == this.checked &&
@@ -697,6 +731,7 @@ class CartItemCompanion extends UpdateCompanion<CartItemData> {
   final Value<int?> cartId;
   final Value<String> name;
   final Value<String> quantity;
+  final Value<double> price;
   final Value<String> emoji;
   final Value<String?> barCode;
   final Value<bool> checked;
@@ -706,6 +741,7 @@ class CartItemCompanion extends UpdateCompanion<CartItemData> {
     this.cartId = const Value.absent(),
     this.name = const Value.absent(),
     this.quantity = const Value.absent(),
+    this.price = const Value.absent(),
     this.emoji = const Value.absent(),
     this.barCode = const Value.absent(),
     this.checked = const Value.absent(),
@@ -716,18 +752,21 @@ class CartItemCompanion extends UpdateCompanion<CartItemData> {
     this.cartId = const Value.absent(),
     required String name,
     required String quantity,
+    required double price,
     required String emoji,
     this.barCode = const Value.absent(),
     this.checked = const Value.absent(),
     this.createdAt = const Value.absent(),
   }) : name = Value(name),
        quantity = Value(quantity),
+       price = Value(price),
        emoji = Value(emoji);
   static Insertable<CartItemData> custom({
     Expression<int>? id,
     Expression<int>? cartId,
     Expression<String>? name,
     Expression<String>? quantity,
+    Expression<double>? price,
     Expression<String>? emoji,
     Expression<String>? barCode,
     Expression<bool>? checked,
@@ -737,7 +776,8 @@ class CartItemCompanion extends UpdateCompanion<CartItemData> {
       if (id != null) 'id': id,
       if (cartId != null) 'cart_id': cartId,
       if (name != null) 'name': name,
-      if (quantity != null) 'body': quantity,
+      if (quantity != null) 'quantity': quantity,
+      if (price != null) 'price': price,
       if (emoji != null) 'emoji': emoji,
       if (barCode != null) 'bar_code': barCode,
       if (checked != null) 'checked': checked,
@@ -750,6 +790,7 @@ class CartItemCompanion extends UpdateCompanion<CartItemData> {
     Value<int?>? cartId,
     Value<String>? name,
     Value<String>? quantity,
+    Value<double>? price,
     Value<String>? emoji,
     Value<String?>? barCode,
     Value<bool>? checked,
@@ -760,6 +801,7 @@ class CartItemCompanion extends UpdateCompanion<CartItemData> {
       cartId: cartId ?? this.cartId,
       name: name ?? this.name,
       quantity: quantity ?? this.quantity,
+      price: price ?? this.price,
       emoji: emoji ?? this.emoji,
       barCode: barCode ?? this.barCode,
       checked: checked ?? this.checked,
@@ -780,7 +822,10 @@ class CartItemCompanion extends UpdateCompanion<CartItemData> {
       map['name'] = Variable<String>(name.value);
     }
     if (quantity.present) {
-      map['body'] = Variable<String>(quantity.value);
+      map['quantity'] = Variable<String>(quantity.value);
+    }
+    if (price.present) {
+      map['price'] = Variable<double>(price.value);
     }
     if (emoji.present) {
       map['emoji'] = Variable<String>(emoji.value);
@@ -804,6 +849,7 @@ class CartItemCompanion extends UpdateCompanion<CartItemData> {
           ..write('cartId: $cartId, ')
           ..write('name: $name, ')
           ..write('quantity: $quantity, ')
+          ..write('price: $price, ')
           ..write('emoji: $emoji, ')
           ..write('barCode: $barCode, ')
           ..write('checked: $checked, ')
@@ -1104,6 +1150,7 @@ typedef $$CartItemTableCreateCompanionBuilder =
       Value<int?> cartId,
       required String name,
       required String quantity,
+      required double price,
       required String emoji,
       Value<String?> barCode,
       Value<bool> checked,
@@ -1115,6 +1162,7 @@ typedef $$CartItemTableUpdateCompanionBuilder =
       Value<int?> cartId,
       Value<String> name,
       Value<String> quantity,
+      Value<double> price,
       Value<String> emoji,
       Value<String?> barCode,
       Value<bool> checked,
@@ -1164,6 +1212,11 @@ class $$CartItemTableFilterComposer
 
   ColumnFilters<String> get quantity => $composableBuilder(
     column: $table.quantity,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get price => $composableBuilder(
+    column: $table.price,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -1235,6 +1288,11 @@ class $$CartItemTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<double> get price => $composableBuilder(
+    column: $table.price,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get emoji => $composableBuilder(
     column: $table.emoji,
     builder: (column) => ColumnOrderings(column),
@@ -1296,6 +1354,9 @@ class $$CartItemTableAnnotationComposer
 
   GeneratedColumn<String> get quantity =>
       $composableBuilder(column: $table.quantity, builder: (column) => column);
+
+  GeneratedColumn<double> get price =>
+      $composableBuilder(column: $table.price, builder: (column) => column);
 
   GeneratedColumn<String> get emoji =>
       $composableBuilder(column: $table.emoji, builder: (column) => column);
@@ -1365,6 +1426,7 @@ class $$CartItemTableTableManager
                 Value<int?> cartId = const Value.absent(),
                 Value<String> name = const Value.absent(),
                 Value<String> quantity = const Value.absent(),
+                Value<double> price = const Value.absent(),
                 Value<String> emoji = const Value.absent(),
                 Value<String?> barCode = const Value.absent(),
                 Value<bool> checked = const Value.absent(),
@@ -1374,6 +1436,7 @@ class $$CartItemTableTableManager
                 cartId: cartId,
                 name: name,
                 quantity: quantity,
+                price: price,
                 emoji: emoji,
                 barCode: barCode,
                 checked: checked,
@@ -1385,6 +1448,7 @@ class $$CartItemTableTableManager
                 Value<int?> cartId = const Value.absent(),
                 required String name,
                 required String quantity,
+                required double price,
                 required String emoji,
                 Value<String?> barCode = const Value.absent(),
                 Value<bool> checked = const Value.absent(),
@@ -1394,6 +1458,7 @@ class $$CartItemTableTableManager
                 cartId: cartId,
                 name: name,
                 quantity: quantity,
+                price: price,
                 emoji: emoji,
                 barCode: barCode,
                 checked: checked,

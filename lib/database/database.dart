@@ -68,6 +68,7 @@ class AppDatabase extends _$AppDatabase {
       cartId: Value(currentCart.id),
       name: Value(existingItem.name),
       quantity: Value(existingItem.quantity),
+      price: Value(existingItem.price),
       emoji: Value(existingItem.emoji),
       barCode: Value(existingItem.barCode),
     );
