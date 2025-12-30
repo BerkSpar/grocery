@@ -30,7 +30,12 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            CartHomeSummary(totalValue: 0),
+            StreamBuilder(
+              stream: context.read<CartDAO>().watchOpenCartTotalPrice(),
+              builder: (context, stream) {
+                return CartHomeSummary(totalValue: stream.data ?? 0);
+              },
+            ),
             const SizedBox(height: 16),
             StreamBuilder(
               stream: context.read<CartDAO>().watchPreCartItems(),
