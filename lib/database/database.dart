@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:grocery/database/cart_table.dart';
@@ -34,34 +36,58 @@ class AppDatabase extends _$AppDatabase {
     return into(cart).insert(CartCompanion(timerValue: Value(0)));
   }
 
+  Stream<CartData?> watchOpenCart() {
+    return (select(
+      cart,
+    )..where((cart) => cart.finishedAt.isNull())).watchSingleOrNull();
+  }
+
   Future<CartData?> getOpenCart() {
     return (select(
       cart,
     )..where((cart) => cart.finishedAt.isNull())).getSingleOrNull();
   }
 
-  Stream<double> watchOpenCartTotalPrice() async* {
-    var currentCartId = await getOpenCart();
+  Stream<double?> watchOpenCartTotalPrice() {
+    late StreamSubscription cartSub;
+    StreamSubscription? itemsSub;
 
-    if (currentCartId?.id == null) yield 0;
+    final controller = StreamController<double?>();
 
-    yield* (selectOnly(cartItem)
-          ..addColumns([cartItem.price.sum()])
-          ..where(cartItem.cartId.equals(currentCartId!.id)))
-        .watchSingle()
-        .map((row) => row.read(cartItem.price.sum()) ?? 0.0);
+    cartSub = watchOpenCart().listen((cart) async {
+      await itemsSub?.cancel();
+      itemsSub = null;
+
+      if (cart == null) {
+        controller.add(null);
+        return;
+      }
+
+      itemsSub =
+          (selectOnly(cartItem)
+                ..addColumns([cartItem.price.sum()])
+                ..where(cartItem.cartId.equals(cart.id)))
+              .watchSingle()
+              .listen((row) {
+                controller.add(row.read(cartItem.price.sum()) ?? 0.0);
+              });
+    });
+
+    controller.onCancel = () async {
+      await cartSub.cancel();
+      await itemsSub?.cancel();
+    };
+
+    return controller.stream;
   }
 
   Future<List<CartData?>> getCarts() {
     return (select(cart)..where((cart) => cart.finishedAt.isNotNull())).get();
   }
 
-  void closeCart(int cartId, int timerValue, DateTime fishinedAt) {
+  void closeCart(int cartId, DateTime fishinedAt) {
     (update(cart)..where((cart) => cart.id.equals(cartId))).write(
-      CartCompanion(
-        timerValue: Value(timerValue),
-        finishedAt: Value(fishinedAt),
-      ),
+      CartCompanion(finishedAt: Value(fishinedAt)),
     );
   }
 

@@ -1,8 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:grocery/daos/cart_dao.dart';
 import 'package:grocery/views/home/widgets/cart_home_summary.dart';
 import 'package:grocery/views/home/widgets/cart_items_list.dart';
 import 'package:provider/provider.dart';
+
+import 'package:grocery/widgets/neo_card.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -12,6 +16,14 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  void createCart() {
+    try {
+      context.read<CartDAO>().createCart();
+    } on Exception catch (e) {
+      log(e.toString());
+    }
+  }
+
   void createNewItem() async {
     await context.read<CartDAO>().createPreCartItem(
       name: 'Pizza',
@@ -33,10 +45,15 @@ class _HomeScreenState extends State<HomeScreen> {
             StreamBuilder(
               stream: context.read<CartDAO>().watchOpenCartTotalPrice(),
               builder: (context, stream) {
+                if (!stream.hasData || stream.data == null) {
+                  return SizedBox.shrink();
+                }
+
                 return CartHomeSummary(totalValue: stream.data ?? 0);
               },
             ),
             const SizedBox(height: 16),
+
             StreamBuilder(
               stream: context.read<CartDAO>().watchPreCartItems(),
               builder: (context, stream) {
@@ -44,6 +61,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   items: stream.data ?? [],
                   onAddNewItem: createNewItem,
                   onItemToggled: toggleCartItem,
+                );
+              },
+            ),
+
+            StreamBuilder(
+              stream: context.read<CartDAO>().watchOpenCartTotalPrice(),
+              builder: (context, stream) {
+                if (stream.hasData) return SizedBox.shrink();
+                return NeoCard(
+                  onTap: createCart,
+                  child: Text('Abrir carrinho'),
                 );
               },
             ),
