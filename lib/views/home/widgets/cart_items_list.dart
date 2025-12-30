@@ -48,44 +48,51 @@ class CartItemsList extends StatelessWidget {
       );
     }
 
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: .spaceBetween,
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: Column(
           children: [
-            Text(
-              'Lista de compras',
-              style: TextStyle(fontWeight: .bold, fontSize: 20),
+            Row(
+              mainAxisAlignment: .spaceBetween,
+              children: [
+                Text(
+                  'Lista de compras',
+                  style: TextStyle(fontWeight: .bold, fontSize: 20),
+                ),
+                NeoCard(
+                  onTap: onAddNewItem,
+                  backgroundColor: Color(0xFFFFE156),
+                  shadowOffset: 4,
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  child: Text(
+                    'adicionar',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                ),
+              ],
             ),
-            NeoCard(
-              onTap: onAddNewItem,
-              backgroundColor: Color(0xFFFFE156),
-              shadowOffset: 4,
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              child: Text(
-                'adicionar',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            const SizedBox(height: 16),
+            Expanded(
+              child: ListView.separated(
+                itemBuilder: (_, index) {
+                  final item = items[index];
+
+                  return NeoListTile(
+                    emoji: item.emoji,
+                    title: item.name,
+                    subtitle: item.quantity,
+                    checked: item.checked,
+                    onTap: () => onItemToggled(item.id),
+                  );
+                },
+                separatorBuilder: (_, _) => SizedBox(height: 16),
+                itemCount: items.length,
               ),
             ),
           ],
         ),
-        const SizedBox(height: 16),
-        ListView.separated(
-          itemBuilder: (_, index) {
-            final item = items[index];
-
-            return NeoListTile(
-              emoji: item.emoji,
-              title: item.name,
-              subtitle: item.quantity,
-              checked: item.checked,
-              onTap: () => onItemToggled(item.id),
-            );
-          },
-          separatorBuilder: (_, _) => SizedBox(height: 16),
-          itemCount: items.length,
-        ),
-      ],
+      ),
     );
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:grocery/daos/cart_dao.dart';
 import 'package:grocery/views/home/widgets/cart_home_summary.dart';
 import 'package:grocery/views/home/widgets/cart_items_list.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -10,6 +12,14 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  void createNewItem() async {
+    await context.read<CartDAO>().createPreCartItem('Pizza', '12un', '🍕');
+  }
+
+  void toggleCartItem(int cartItemId) {
+    context.read<CartDAO>().toggleCartItem(cartItemId);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,10 +28,15 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             CartHomeSummary(totalValue: 0),
             const SizedBox(height: 16),
-            CartItemsList(
-              items: [],
-              onAddNewItem: () {},
-              onItemToggled: (id) {},
+            StreamBuilder(
+              stream: context.read<CartDAO>().watchPreCartItems(),
+              builder: (context, stream) {
+                return CartItemsList(
+                  items: stream.data ?? [],
+                  onAddNewItem: createNewItem,
+                  onItemToggled: toggleCartItem,
+                );
+              },
             ),
           ],
         ),

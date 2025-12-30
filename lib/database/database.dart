@@ -44,8 +44,8 @@ class AppDatabase extends _$AppDatabase {
     return (select(cart)..where((cart) => cart.finishedAt.isNotNull())).get();
   }
 
-  Future<int> closeCart(int cartId, int timerValue, DateTime fishinedAt) {
-    return (update(cart)..where((cart) => cart.id.equals(cartId))).write(
+  void closeCart(int cartId, int timerValue, DateTime fishinedAt) {
+    (update(cart)..where((cart) => cart.id.equals(cartId))).write(
       CartCompanion(
         timerValue: Value(timerValue),
         finishedAt: Value(fishinedAt),
@@ -95,5 +95,10 @@ class AppDatabase extends _$AppDatabase {
     return (select(
       cartItem,
     )..where((item) => item.cartId.equals(cartId))).watch();
+  }
+
+  Future<int> toggleCartItem(int cartItemId) async {
+    return (update(cartItem)..where((item) => item.id.equals(cartItemId)))
+        .write(CartItemCompanion.custom(checked: cartItem.checked.not()));
   }
 }
