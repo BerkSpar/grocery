@@ -19,7 +19,7 @@ class CartSummary extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24),
         child: NeoCard(
-          backgroundColor: Colors.green,
+          backgroundColor: Colors.greenAccent,
           child: SizedBox(
             width: double.maxFinite,
             child: Column(

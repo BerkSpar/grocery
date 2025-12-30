@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grocery/daos/cart_dao.dart';
 import 'package:grocery/views/cart/widgets/barcode_scanner_button.dart';
 import 'package:grocery/views/cart/widgets/cart_summary.dart';
+import 'package:grocery/views/cart/widgets/close_cart_button.dart';
 import 'package:grocery/views/cart/widgets/next_items_list.dart';
 import 'package:grocery/views/cart/widgets/timer_header.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +17,7 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   void closeCart() {
     context.read<CartDAO>().closeCart(DateTime.now());
+    Navigator.of(context).pop();
   }
 
   @override
@@ -25,7 +27,7 @@ class _CartScreenState extends State<CartScreen> {
         child: Column(
           crossAxisAlignment: .start,
           children: [
-            TimerHeader(startedAt: DateTime.now(), onClose: closeCart),
+            TimerHeader(startedAt: DateTime.now()),
             const SizedBox(height: 16),
             StreamBuilder(
               stream: context.read<CartDAO>().watchOpenCartTotalPrice(),
@@ -37,6 +39,7 @@ class _CartScreenState extends State<CartScreen> {
             BarcodeScannerButton(onTap: () {}),
             const SizedBox(height: 16),
             NextItemsList(items: []),
+            CloseCartButton(onCloseCart: closeCart),
           ],
         ),
       ),

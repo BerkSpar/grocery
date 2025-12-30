@@ -33,8 +33,6 @@ class CartItemsList extends StatelessWidget {
                 const SizedBox(height: 16),
                 NeoCard(
                   onTap: onAddNewItem,
-                  backgroundColor: Color(0xFFFFE156),
-                  shadowOffset: 4,
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   child: Text(
                     'adicionar',

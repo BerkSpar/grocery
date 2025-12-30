@@ -20,7 +20,7 @@ class CartHomeSummary extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: NeoCard(
-        backgroundColor: Colors.green,
+        backgroundColor: Colors.orangeAccent,
         onTap: () {
           Navigator.of(
             context,

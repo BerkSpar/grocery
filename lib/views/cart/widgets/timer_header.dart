@@ -6,13 +6,9 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class TimerHeader extends StatefulWidget {
   final DateTime startedAt;
-  final VoidCallback onClose;
+  final VoidCallback? onClose;
 
-  const TimerHeader({
-    super.key,
-    required this.startedAt,
-    required this.onClose,
-  });
+  const TimerHeader({super.key, required this.startedAt, this.onClose});
 
   @override
   State<TimerHeader> createState() => _TimerHeaderState();
@@ -62,6 +58,15 @@ class _TimerHeaderState extends State<TimerHeader> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           NeoCard(
+            onTap: () {
+              widget.onClose?.call();
+              Navigator.of(context).pop();
+            },
+            backgroundColor: Colors.white,
+            padding: const EdgeInsets.all(8),
+            child: PhosphorIcon(PhosphorIconsBold.arrowLeft, size: 24),
+          ),
+          NeoCard(
             backgroundColor: Colors.white,
             padding: const EdgeInsets.all(8),
             child: Row(
@@ -74,16 +79,6 @@ class _TimerHeaderState extends State<TimerHeader> {
                 PhosphorIcon(PhosphorIcons.clock(), size: 20),
               ],
             ),
-          ),
-          NeoCard(
-            onTap: () {
-              widget.onClose();
-              Navigator.of(context).pop();
-            },
-            backgroundColor: const Color(0xFFFF9898),
-            shadowColor: const Color(0xff855050),
-            padding: const EdgeInsets.all(8),
-            child: PhosphorIcon(PhosphorIconsBold.x, size: 24),
           ),
         ],
       ),

@@ -11,7 +11,7 @@ class NeoCard extends StatefulWidget {
   const NeoCard({
     super.key,
     required this.child,
-    this.backgroundColor = const Color(0xFFFFE156),
+    this.backgroundColor = Colors.yellowAccent,
     this.shadowColor = Colors.black,
     this.shadowOffset = 2,
     this.onTap,
@@ -28,14 +28,18 @@ class _NeoCardState extends State<NeoCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTapDown: widget.onTap != null ? (_) => setState(() => _isPressed = true) : null,
+      onTapDown: widget.onTap != null
+          ? (_) => setState(() => _isPressed = true)
+          : null,
       onTapUp: widget.onTap != null
           ? (_) {
               setState(() => _isPressed = false);
               widget.onTap?.call();
             }
           : null,
-      onTapCancel: widget.onTap != null ? () => setState(() => _isPressed = false) : null,
+      onTapCancel: widget.onTap != null
+          ? () => setState(() => _isPressed = false)
+          : null,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 50),
         transform: Matrix4.translationValues(
