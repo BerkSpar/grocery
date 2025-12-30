@@ -27,7 +27,14 @@ class _CartScreenState extends State<CartScreen> {
         child: Column(
           crossAxisAlignment: .start,
           children: [
-            TimerHeader(startedAt: DateTime.now()),
+            StreamBuilder(
+              stream: context.read<CartDAO>().watchOpenCart(),
+              builder: (context, stream) {
+                return TimerHeader(
+                  startedAt: stream.data?.createdAt ?? DateTime.now(),
+                );
+              },
+            ),
             const SizedBox(height: 16),
             StreamBuilder(
               stream: context.read<CartDAO>().watchOpenCartTotalPrice(),
@@ -38,8 +45,14 @@ class _CartScreenState extends State<CartScreen> {
             const SizedBox(height: 16),
             BarcodeScannerButton(onTap: () {}),
             const SizedBox(height: 16),
-            NextItemsList(items: []),
             CloseCartButton(onCloseCart: closeCart),
+            const SizedBox(height: 16),
+            StreamBuilder(
+              stream: context.read<CartDAO>().watchPreCartItems(),
+              builder: (context, stream) {
+                return NextItemsList(items: stream.data ?? []);
+              },
+            ),
           ],
         ),
       ),

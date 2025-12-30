@@ -62,9 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     return CartHomeSummary(totalValue: stream.data ?? 0);
                   },
                 ),
-
                 const SizedBox(height: 16),
-
                 StreamBuilder(
                   stream: context.read<CartDAO>().watchPreCartItems(),
                   builder: (context, stream) {

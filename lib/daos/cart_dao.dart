@@ -35,6 +35,10 @@ class CartDAO {
     return await _database.getOpenCart();
   }
 
+  Stream<CartData?> watchOpenCart() {
+    return _database.watchOpenCart();
+  }
+
   Stream<double?> watchOpenCartTotalPrice() {
     return _database.watchOpenCartTotalPrice();
   }
