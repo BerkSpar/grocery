@@ -6,6 +6,7 @@ class NeoListTile extends StatelessWidget {
   final String subtitle;
   final bool checked;
   final String emoji;
+  final VoidCallback onTap;
 
   const NeoListTile({
     super.key,
@@ -13,6 +14,7 @@ class NeoListTile extends StatelessWidget {
     required this.subtitle,
     required this.checked,
     required this.emoji,
+    required this.onTap,
   });
 
   @override
@@ -26,21 +28,24 @@ class NeoListTile extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: Row(
         children: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(4),
-              border: Border.all(width: 3, color: Colors.black),
-              color: checked ? Colors.green.shade800 : null,
+          GestureDetector(
+            onTap: onTap,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4),
+                border: Border.all(width: 3, color: Colors.black),
+                color: checked ? Colors.green.shade800 : null,
+              ),
+              height: 24,
+              width: 24,
+              child: checked
+                  ? PhosphorIcon(
+                      PhosphorIconsBold.check,
+                      size: 16,
+                      color: Colors.white,
+                    )
+                  : null,
             ),
-            height: 24,
-            width: 24,
-            child: checked
-                ? PhosphorIcon(
-                    PhosphorIconsBold.check,
-                    size: 16,
-                    color: Colors.white,
-                  )
-                : null,
           ),
           const SizedBox(width: 16),
           Text(emoji, style: TextStyle(fontSize: 24)),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:grocery/database/cart_item_table.dart';
 import 'package:grocery/extensions/list_extension.dart';
+import 'package:grocery/views/home/cart_screen.dart';
 import 'package:grocery/widgets/neo_button.dart';
 import 'package:grocery/widgets/neo_card.dart';
 import 'package:grocery/widgets/neo_list_tile.dart';
@@ -31,7 +32,11 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             NeoCard(
               backgroundColor: Colors.green,
-              onTap: () {},
+              onTap: () {
+                Navigator.of(
+                  context,
+                ).push(MaterialPageRoute(builder: (_) => CartScreen()));
+              },
               child: Row(
                 crossAxisAlignment: .end,
                 mainAxisAlignment: .spaceBetween,
@@ -75,6 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   title: ['batata', 'leite', 'açucar'].random(),
                   subtitle: ['200g', '1kg', '5un'].random(),
                   checked: [true, false].random(),
+                  onTap: () {},
                 );
               },
               separatorBuilder: (_, _) => SizedBox(height: 16),
