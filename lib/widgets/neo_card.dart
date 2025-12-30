@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
-class NeoCard extends StatelessWidget {
+class NeoCard extends StatefulWidget {
   final Color backgroundColor;
   final Color shadowColor;
   final double shadowOffset;
   final Widget child;
   final VoidCallback? onTap;
+  final EdgeInsetsGeometry padding;
 
   const NeoCard({
     super.key,
@@ -14,26 +15,49 @@ class NeoCard extends StatelessWidget {
     this.shadowColor = Colors.black,
     this.shadowOffset = 2,
     this.onTap,
+    this.padding = const EdgeInsets.all(16),
   });
+
+  @override
+  State<NeoCard> createState() => _NeoCardState();
+}
+
+class _NeoCardState extends State<NeoCard> {
+  bool _isPressed = false;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
-      child: Container(
+      onTapDown: widget.onTap != null ? (_) => setState(() => _isPressed = true) : null,
+      onTapUp: widget.onTap != null
+          ? (_) {
+              setState(() => _isPressed = false);
+              widget.onTap?.call();
+            }
+          : null,
+      onTapCancel: widget.onTap != null ? () => setState(() => _isPressed = false) : null,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 50),
+        transform: Matrix4.translationValues(
+          _isPressed ? widget.shadowOffset : 0,
+          _isPressed ? widget.shadowOffset : 0,
+          0,
+        ),
         decoration: BoxDecoration(
-          color: backgroundColor,
+          color: widget.backgroundColor,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(width: 3, color: Colors.black),
-          boxShadow: [
-            BoxShadow(
-              color: shadowColor,
-              offset: Offset(shadowOffset, shadowOffset),
-            ),
-          ],
+          boxShadow: _isPressed || widget.onTap == null
+              ? []
+              : [
+                  BoxShadow(
+                    color: widget.shadowColor,
+                    offset: Offset(widget.shadowOffset, widget.shadowOffset),
+                  ),
+                ],
         ),
-        padding: EdgeInsets.all(16),
-        child: child,
+        padding: widget.padding,
+        child: widget.child,
       ),
     );
   }
