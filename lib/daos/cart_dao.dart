@@ -35,7 +35,7 @@ class CartDAO {
     return await _database.getOpenCart();
   }
 
-  Stream<double> watchOpenCartTotalPrice() {
+  Stream<double?> watchOpenCartTotalPrice() {
     return _database.watchOpenCartTotalPrice();
   }
 
@@ -80,12 +80,12 @@ class CartDAO {
     await _database.createNewItemToOpenCart(newItem);
   }
 
-  void closeCart(int timerValue) async {
+  void closeCart(DateTime fishinedAt) async {
     var currentCart = await _database.getOpenCart();
 
     if (currentCart == null) return;
 
-    _database.closeCart(currentCart.id, timerValue, DateTime.now());
+    _database.closeCart(currentCart.id, DateTime.now());
   }
 
   Future<int> toggleCartItem(int cartItemId) async {

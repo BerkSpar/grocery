@@ -14,6 +14,10 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
+  void closeCart() {
+    context.read<CartDAO>().closeCart(DateTime.now());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +25,7 @@ class _CartScreenState extends State<CartScreen> {
         child: Column(
           crossAxisAlignment: .start,
           children: [
-            TimerHeader(startedAt: DateTime.now()),
+            TimerHeader(startedAt: DateTime.now(), onClose: closeCart),
             const SizedBox(height: 16),
             StreamBuilder(
               stream: context.read<CartDAO>().watchOpenCartTotalPrice(),
