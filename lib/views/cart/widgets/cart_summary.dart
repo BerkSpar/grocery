@@ -4,13 +4,8 @@ import 'package:intl/intl.dart';
 
 class CartSummary extends StatelessWidget {
   final double totalValue;
-  final int itemCount;
 
-  const CartSummary({
-    super.key,
-    required this.totalValue,
-    required this.itemCount,
-  });
+  const CartSummary({super.key, required this.totalValue});
 
   static final _currencyFormat = NumberFormat.currency(
     locale: 'pt_BR',
@@ -30,7 +25,7 @@ class CartSummary extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('carrinho • $itemCount items'),
+                Text('Total no carrinho'),
                 const SizedBox(height: 8),
                 Text(
                   _currencyFormat.format(totalValue),

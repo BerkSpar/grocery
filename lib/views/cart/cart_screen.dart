@@ -27,7 +27,12 @@ class _CartScreenState extends State<CartScreen> {
           children: [
             TimerHeader(startedAt: DateTime.now(), onClose: closeCart),
             const SizedBox(height: 16),
-            CartSummary(itemCount: 3, totalValue: 34),
+            StreamBuilder(
+              stream: context.read<CartDAO>().watchOpenCartTotalPrice(),
+              builder: (context, stream) {
+                return CartSummary(totalValue: stream.data ?? 0);
+              },
+            ),
             const SizedBox(height: 16),
             BarcodeScannerButton(onTap: () {}),
             const SizedBox(height: 16),
