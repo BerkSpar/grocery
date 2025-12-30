@@ -1,9 +1,19 @@
 class CartItem {
-  CartItem(this.id, this.name, this.quantity, this.emoji, this.checked);
+  CartItem(
+    this.id,
+    this.name,
+    this.quantity,
+    this.emoji,
+    this.barCode,
+    this.checked,
+    this.createdAt,
+  );
 
-  String id;
+  int id;
   String name;
   String quantity;
   String emoji;
+  String? barCode;
   bool checked;
+  DateTime createdAt;
 }
