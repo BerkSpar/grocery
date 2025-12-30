@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import 'package:grocery/controllers/cart_controller.dart';
 import 'package:grocery/views/home/home_screen.dart';
 import 'package:provider/provider.dart';
