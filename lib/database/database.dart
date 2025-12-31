@@ -1,8 +1,7 @@
-import 'dart:async';
-
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:grocery/database/cart_table.dart';
+import 'package:grocery/database/helpers.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'cart_item_table.dart';
@@ -56,36 +55,41 @@ class AppDatabase extends _$AppDatabase {
   }
 
   Stream<double?> watchOpenCartTotalPrice() {
-    late StreamSubscription cartSub;
-    StreamSubscription? itemsSub;
-
-    final controller = StreamController<double?>();
-
-    cartSub = watchOpenCart().listen((cart) async {
-      await itemsSub?.cancel();
-      itemsSub = null;
-
-      if (cart == null) {
-        controller.add(null);
-        return;
-      }
-
-      itemsSub =
+    return switchOnOpenCartOrNull(
+      watchOpenCart(),
+      (cartId) =>
           (selectOnly(cartItem)
                 ..addColumns([cartItem.price.sum()])
-                ..where(cartItem.cartId.equals(cart.id)))
+                ..where(cartItem.cartId.equals(cartId)))
               .watchSingle()
-              .listen((row) {
-                controller.add(row.read(cartItem.price.sum()) ?? 0.0);
-              });
-    });
+              .map((row) => row.read(cartItem.price.sum()) ?? 0.0),
+    );
+  }
 
-    controller.onCancel = () async {
-      await cartSub.cancel();
-      await itemsSub?.cancel();
-    };
+  Stream<List<CartItemData>?> watchOpenCartCheckedItems() {
+    return switchOnOpenCartOrNull(
+      watchOpenCart(),
+      (cartId) =>
+          (select(cartItem)..where(
+                (cartItem) =>
+                    cartItem.cartId.equals(cartId) &
+                    cartItem.checked.equals(true),
+              ))
+              .watch(),
+    );
+  }
 
-    return controller.stream;
+  Stream<List<CartItemData>?> watchOpenCartUncheckedItems() {
+    return switchOnOpenCartOrNull(
+      watchOpenCart(),
+      (cartId) =>
+          (select(cartItem)..where(
+                (cartItem) =>
+                    cartItem.cartId.equals(cartId) &
+                    cartItem.checked.equals(false),
+              ))
+              .watch(),
+    );
   }
 
   Future<List<CartData?>> getCarts() {
@@ -135,12 +139,6 @@ class AppDatabase extends _$AppDatabase {
     return (select(
       cartItem,
     )..where((item) => item.cartId.equals(cartId))).get();
-  }
-
-  Stream<List<CartItemData>> watchCartItems(int cartId) {
-    return (select(
-      cartItem,
-    )..where((item) => item.cartId.equals(cartId))).watch();
   }
 
   Future<int> toggleCartItem(int cartItemId) async {

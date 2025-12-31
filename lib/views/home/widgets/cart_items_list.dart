@@ -26,7 +26,7 @@ class CartItemsList extends StatelessWidget {
               mainAxisSize: .min,
               children: [
                 Text(
-                  'Você ainda não itens na\nsua lista de compra',
+                  'Você ainda não tem itens na\nsua lista de compra',
                   style: TextStyle(fontSize: 20),
                   textAlign: .center,
                 ),

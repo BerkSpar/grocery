@@ -43,6 +43,14 @@ class CartDAO {
     return _database.watchOpenCartTotalPrice();
   }
 
+  Stream<List<CartItemData>?> watchOpenCartCheckedItems() {
+    return _database.watchOpenCartCheckedItems();
+  }
+
+  Stream<List<CartItemData>?> watchOpenCartUncheckedItems() {
+    return _database.watchOpenCartUncheckedItems();
+  }
+
   Future<CartData?> createCart() async {
     var currentCart = await _database.getOpenCart();
 
