@@ -76,4 +76,8 @@ class CartDAO {
 
     _database.closeCart(currentCart.id, timerValue, DateTime.now());
   }
+
+  Future<int> toggleCartItem(int cartItemId) async {
+    return await _database.toggleCartItem(cartItemId);
+  }
 }

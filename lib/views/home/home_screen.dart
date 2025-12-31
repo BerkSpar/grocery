@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:grocery/database/cart_item_table.dart';
-import 'package:grocery/extensions/list_extension.dart';
+import 'package:grocery/daos/cart_dao.dart';
 import 'package:grocery/views/home/cart_screen.dart';
 import 'package:grocery/widgets/neo_button.dart';
 import 'package:grocery/widgets/neo_card.dart';
 import 'package:grocery/widgets/neo_list_tile.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,13 +15,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<CartItem> items = [
-    CartItem(),
-    CartItem(),
-    CartItem(),
-    CartItem(),
-    CartItem(),
-  ];
+  void createNewItem() async {
+    await context.read<CartDAO>().createPreCartItem('Pizza', '12un', '🍕');
+  }
+
+  void toggleCartItem(int cartItemId) {
+    context.read<CartDAO>().toggleCartItem(cartItemId);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,26 +65,36 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 NeoButton(
                   text: 'adicionar',
-                  onPressed: () {},
+                  onPressed: () => createNewItem(),
                   backgroundColor: Color(0xFFFFE156),
                   shadowOffset: 4,
                 ),
               ],
             ),
             const SizedBox(height: 16),
-            ListView.separated(
-              shrinkWrap: true,
-              itemBuilder: (_, _) {
-                return NeoListTile(
-                  emoji: ['🥛', '🧀', '🍞'].random(),
-                  title: ['batata', 'leite', 'açucar'].random(),
-                  subtitle: ['200g', '1kg', '5un'].random(),
-                  checked: [true, false].random(),
-                  onTap: () {},
-                );
+
+            StreamBuilder(
+              stream: context.read<CartDAO>().watchPreCartItems(),
+              builder: (context, stream) {
+                if (stream.hasData) {
+                  return ListView.separated(
+                    shrinkWrap: true,
+                    itemBuilder: (_, index) {
+                      return NeoListTile(
+                        emoji: stream.data![index].emoji,
+                        title: stream.data![index].name,
+                        subtitle: stream.data![index].quantity,
+                        checked: stream.data![index].checked,
+                        onTap: () => toggleCartItem(stream.data![index].id),
+                      );
+                    },
+                    separatorBuilder: (_, _) => SizedBox(height: 16),
+                    itemCount: stream.data!.length,
+                  );
+                }
+
+                return Text('Sem Itens');
               },
-              separatorBuilder: (_, _) => SizedBox(height: 16),
-              itemCount: items.length,
             ),
           ],
         ),
