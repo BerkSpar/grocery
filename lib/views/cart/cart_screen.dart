@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grocery/daos/cart_dao.dart';
-import 'package:grocery/services/barcode_service.dart';
+import 'package:grocery/models/product.dart';
 import 'package:grocery/views/cart/scanner_screen.dart';
 import 'package:grocery/views/cart/widgets/add_cart_item_bottom_sheet.dart';
 import 'package:grocery/views/cart/widgets/barcode_scanner_button.dart';
@@ -8,7 +8,6 @@ import 'package:grocery/views/cart/widgets/cart_summary.dart';
 import 'package:grocery/views/cart/widgets/close_cart_button.dart';
 import 'package:grocery/views/cart/widgets/next_items_list.dart';
 import 'package:grocery/views/cart/widgets/timer_header.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
 
 class CartScreen extends StatefulWidget {
@@ -25,18 +24,16 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   void openScanner() async {
-    final Barcode barcode = await Navigator.of(
+    final Product? product = await Navigator.of(
       context,
     ).push(MaterialPageRoute(builder: (context) => ScannerScreen()));
-
-    final product = await getProduct(barcode.rawValue ?? '');
 
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       builder: (context) {
         return AddCartItemBottomSheet(
-          barcode: barcode.rawValue,
+          barcode: product?.barCode,
           name: product?.name ?? '',
         );
       },

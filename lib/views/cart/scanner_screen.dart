@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grocery/services/barcode_service.dart';
 import 'package:grocery/widgets/neo_card.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -15,6 +16,8 @@ class _ScannerScreenState extends State<ScannerScreen>
   late final AnimationController _scanController;
   late final Animation<double> _scanAnimation;
   bool canHandleBarcode = true;
+
+  String loadingText = 'Coloque o código de barras aqui';
 
   @override
   void initState() {
@@ -34,13 +37,22 @@ class _ScannerScreenState extends State<ScannerScreen>
     super.dispose();
   }
 
-  void _handleBarcode(BarcodeCapture barcodes) {
+  void _handleBarcode(BarcodeCapture barcodes) async {
     if (!canHandleBarcode) return;
+    canHandleBarcode = false;
+
+    setState(() {
+      loadingText = 'Analisando o produto...';
+    });
 
     final barcode = barcodes.barcodes.firstOrNull;
-    Navigator.of(context).pop(barcode);
 
-    canHandleBarcode = false;
+    final [product, _] = await Future.wait([
+      getProduct(barcode?.rawValue ?? ''),
+      Future.delayed(Duration(seconds: 1)),
+    ]);
+
+    Navigator.of(context).pop(product);
   }
 
   @override
@@ -74,10 +86,7 @@ class _ScannerScreenState extends State<ScannerScreen>
                   ),
                 ),
                 const SizedBox(height: 8),
-                Text(
-                  'Coloque o código de barras aqui',
-                  style: TextStyle(color: Colors.white),
-                ),
+                Text(loadingText, style: TextStyle(color: Colors.white)),
               ],
             ),
           ),
