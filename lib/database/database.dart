@@ -118,8 +118,11 @@ class AppDatabase extends _$AppDatabase {
       return;
     }
 
-    await (update(cartItem)..where((item) => item.id.equals(currentCart.id)))
-        .write(updatedItem.copyWith(cartId: Value(currentCart.id)));
+    await (update(
+      cartItem,
+    )..where((item) => item.id.equals(currentCart.id))).write(
+      updatedItem.copyWith(cartId: Value(currentCart.id), checked: Value(true)),
+    );
   }
 
   Future<int?> createNewItemToOpenCart(CartItemCompanion newItem) async {

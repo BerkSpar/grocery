@@ -74,8 +74,8 @@ class CartDAO {
     String quantity,
     double price,
     String emoji,
-    String barCode,
-    bool checked,
+    String? barCode,
+    String? categoryCode,
   ) async {
     var currentCart = await _database.getOpenCart();
 
@@ -86,7 +86,7 @@ class CartDAO {
       quantity: Value(quantity),
       emoji: Value(emoji),
       barCode: Value(barCode),
-      checked: Value(checked),
+      categoryCode: Value(categoryCode),
     );
 
     await _database.createNewItemToOpenCart(newItem);
@@ -97,9 +97,8 @@ class CartDAO {
     String quantity,
     double price,
     String emoji,
-    String barCode,
-    String categoryCode,
-    bool checked,
+    String? barCode,
+    String? categoryCode,
   ) async {
     CartItemCompanion newItem = CartItemCompanion(
       name: Value(name),
@@ -108,10 +107,9 @@ class CartDAO {
       emoji: Value(emoji),
       barCode: Value(barCode),
       categoryCode: Value(categoryCode),
-      checked: Value(checked),
     );
 
-    await _database.createNewItemToOpenCart(newItem);
+    await _database.addExistingItemToOpenCart(newItem);
   }
 
   void closeCart(DateTime fishinedAt) async {
