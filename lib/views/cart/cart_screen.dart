@@ -55,7 +55,7 @@ class _CartScreenState extends State<CartScreen> {
             CloseCartButton(onCloseCart: closeCart),
             const SizedBox(height: 16),
             StreamBuilder(
-              stream: context.read<CartDAO>().watchOpenCartUncheckedItems(),
+              stream: context.read<CartDAO>().watchOpenCartItemsToScan(),
               builder: (context, stream) {
                 return NextItemsList(items: stream.data ?? []);
               },

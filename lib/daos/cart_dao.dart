@@ -16,6 +16,10 @@ class CartDAO {
     return _database.watchPreCartItems();
   }
 
+  Stream<List<CartItemData>?> watchOpenCartItemsToScan() {
+    return _database.watchOpenCartItemsToScan();
+  }
+
   Future<int> createPreCartItem({
     required String name,
     required String quantity,
@@ -43,12 +47,8 @@ class CartDAO {
     return _database.watchOpenCartTotalPrice();
   }
 
-  Stream<List<CartItemData>?> watchOpenCartCheckedItems() {
-    return _database.watchOpenCartCheckedItems();
-  }
-
-  Stream<List<CartItemData>?> watchOpenCartUncheckedItems() {
-    return _database.watchOpenCartUncheckedItems();
+  Stream<List<CartItemData>?> watchOpenCartItems() {
+    return _database.watchOpenCartItems();
   }
 
   Future<CartData?> createCart() async {
@@ -60,13 +60,9 @@ class CartDAO {
 
     await _database.createCart();
 
-    var preCartItems = await _database.getPreCartItems();
+    CartData? openCart = await _database.getOpenCart();
 
-    for (var item in preCartItems) {
-      await _database.addExistingItemToOpenCart(item);
-    }
-
-    return _database.getOpenCart();
+    return openCart;
   }
 
   void createNewItemToOpenCart(

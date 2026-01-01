@@ -26,7 +26,7 @@ class AppDatabase extends _$AppDatabase {
 
   Future<List<CartItemData>> getPreCartItems() {
     return (select(cartItem)
-          ..where((item) => item.cartId.isNull())
+          ..where((item) => item.cartId.isNull() & item.checked.equals(false))
           ..orderBy([(item) => OrderingTerm.desc(item.createdAt)]))
         .get();
   }
@@ -38,7 +38,7 @@ class AppDatabase extends _$AppDatabase {
         .watch();
   }
 
-  Future<int> createCart() async {
+  Future<int> createCart() {
     return into(cart).insert(CartCompanion(timerValue: Value(0)));
   }
 
@@ -66,7 +66,7 @@ class AppDatabase extends _$AppDatabase {
     );
   }
 
-  Stream<List<CartItemData>?> watchOpenCartCheckedItems() {
+  Stream<List<CartItemData>?> watchOpenCartItems() {
     return switchOnOpenCartOrNull(
       watchOpenCart(),
       (cartId) =>
@@ -79,14 +79,13 @@ class AppDatabase extends _$AppDatabase {
     );
   }
 
-  Stream<List<CartItemData>?> watchOpenCartUncheckedItems() {
+  Stream<List<CartItemData>?> watchOpenCartItemsToScan() {
     return switchOnOpenCartOrNull(
       watchOpenCart(),
       (cartId) =>
           (select(cartItem)..where(
                 (cartItem) =>
-                    cartItem.cartId.equals(cartId) &
-                    cartItem.checked.equals(false),
+                    cartItem.cartId.isNull() & cartItem.checked.equals(false),
               ))
               .watch(),
     );
@@ -96,8 +95,8 @@ class AppDatabase extends _$AppDatabase {
     return (select(cart)..where((cart) => cart.finishedAt.isNotNull())).get();
   }
 
-  void closeCart(int cartId, DateTime fishinedAt) {
-    (update(cart)..where((cart) => cart.id.equals(cartId))).write(
+  Future<void> closeCart(int cartId, DateTime fishinedAt) async {
+    await (update(cart)..where((cart) => cart.id.equals(cartId))).write(
       CartCompanion(finishedAt: Value(fishinedAt)),
     );
   }
@@ -106,23 +105,16 @@ class AppDatabase extends _$AppDatabase {
     return into(cartItem).insert(newItem);
   }
 
-  Future<int?> addExistingItemToOpenCart(CartItemData existingItem) async {
+  Future<void> addExistingItemToOpenCart(int cartItemId) async {
     var currentCart = await getOpenCart();
 
     if (currentCart == null) {
-      return null;
+      return;
     }
 
-    var newItem = CartItemCompanion(
-      cartId: Value(currentCart.id),
-      name: Value(existingItem.name),
-      quantity: Value(existingItem.quantity),
-      price: Value(existingItem.price),
-      emoji: Value(existingItem.emoji),
-      barCode: Value(existingItem.barCode),
+    await (update(cartItem)..where((item) => item.id.equals(cartItemId))).write(
+      CartItemCompanion(cartId: Value(currentCart.id)),
     );
-
-    return await (into(cartItem).insert(newItem));
   }
 
   Future<int?> createNewItemToOpenCart(CartItemCompanion newItem) async {
@@ -141,7 +133,7 @@ class AppDatabase extends _$AppDatabase {
     )..where((item) => item.cartId.equals(cartId))).get();
   }
 
-  Future<int> toggleCartItem(int cartItemId) async {
+  Future<int> toggleCartItem(int cartItemId) {
     return (update(cartItem)..where((item) => item.id.equals(cartItemId)))
         .write(CartItemCompanion.custom(checked: cartItem.checked.not()));
   }
