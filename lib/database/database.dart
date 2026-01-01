@@ -79,6 +79,12 @@ class AppDatabase extends _$AppDatabase {
     );
   }
 
+  Future<void> deleteOpenCartItem(int cartItemId) {
+    return (delete(
+      cartItem,
+    )..where((cartItem) => cartItem.id.equals(cartItemId))).go();
+  }
+
   Stream<List<CartItemData>?> watchOpenCartItemsToScan() {
     return switchOnOpenCartOrNull(
       watchOpenCart(),

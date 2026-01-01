@@ -51,6 +51,10 @@ class CartDAO {
     return _database.watchOpenCartItems();
   }
 
+  Future<void> deleteOpenCartItem(int cartItemId) {
+    return _database.deleteOpenCartItem(cartItemId);
+  }
+
   Future<CartData?> createCart() async {
     var currentCart = await _database.getOpenCart();
 
