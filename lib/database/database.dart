@@ -128,14 +128,14 @@ class AppDatabase extends _$AppDatabase {
     );
   }
 
-  Future<int?> createNewItemToOpenCart(CartItemCompanion newItem) async {
+  Future<void> createNewItemToOpenCart(CartItemCompanion newItem) async {
     var currentCart = await getOpenCart();
 
     if (currentCart == null) {
-      return null;
+      return;
     }
 
-    return await (into(cartItem).insert(newItem));
+    await (into(cartItem).insertReturning(newItem));
   }
 
   Future<List<CartItemData>> getCartItems(int cartId) {

@@ -87,6 +87,7 @@ class CartDAO {
       emoji: Value(emoji),
       barCode: Value(barCode),
       categoryCode: Value(categoryCode),
+      checked: Value(true),
     );
 
     await _database.createNewItemToOpenCart(newItem);
