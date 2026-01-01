@@ -9,6 +9,7 @@ class CartItem extends Table {
   RealColumn get price => real()();
   TextColumn get emoji => text()();
   TextColumn get barCode => text().nullable()();
+  TextColumn get categoryCode => text().nullable()();
   BoolColumn get checked => boolean().clientDefault(() => false)();
   DateTimeColumn get createdAt =>
       dateTime().clientDefault(() => DateTime.now())();

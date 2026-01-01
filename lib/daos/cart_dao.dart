@@ -51,8 +51,8 @@ class CartDAO {
     return _database.watchOpenCartItems();
   }
 
-  Future<void> deleteOpenCartItem(int cartItemId) {
-    return _database.deleteOpenCartItem(cartItemId);
+  Future<void> deleteCartItem(int cartItemId) {
+    return _database.deleteCartItem(cartItemId);
   }
 
   Future<CartData?> createCart() async {
@@ -86,6 +86,28 @@ class CartDAO {
       quantity: Value(quantity),
       emoji: Value(emoji),
       barCode: Value(barCode),
+      checked: Value(checked),
+    );
+
+    await _database.createNewItemToOpenCart(newItem);
+  }
+
+  void addExistingItemToOpenCart(
+    String name,
+    String quantity,
+    double price,
+    String emoji,
+    String barCode,
+    String categoryCode,
+    bool checked,
+  ) async {
+    CartItemCompanion newItem = CartItemCompanion(
+      name: Value(name),
+      price: Value(price),
+      quantity: Value(quantity),
+      emoji: Value(emoji),
+      barCode: Value(barCode),
+      categoryCode: Value(categoryCode),
       checked: Value(checked),
     );
 

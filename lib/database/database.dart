@@ -79,7 +79,7 @@ class AppDatabase extends _$AppDatabase {
     );
   }
 
-  Future<void> deleteOpenCartItem(int cartItemId) {
+  Future<void> deleteCartItem(int cartItemId) {
     return (delete(
       cartItem,
     )..where((cartItem) => cartItem.id.equals(cartItemId))).go();
@@ -111,16 +111,15 @@ class AppDatabase extends _$AppDatabase {
     return into(cartItem).insert(newItem);
   }
 
-  Future<void> addExistingItemToOpenCart(int cartItemId) async {
+  Future<void> addExistingItemToOpenCart(CartItemCompanion updatedItem) async {
     var currentCart = await getOpenCart();
 
     if (currentCart == null) {
       return;
     }
 
-    await (update(cartItem)..where((item) => item.id.equals(cartItemId))).write(
-      CartItemCompanion(cartId: Value(currentCart.id)),
-    );
+    await (update(cartItem)..where((item) => item.id.equals(currentCart.id)))
+        .write(updatedItem.copyWith(cartId: Value(currentCart.id)));
   }
 
   Future<int?> createNewItemToOpenCart(CartItemCompanion newItem) async {

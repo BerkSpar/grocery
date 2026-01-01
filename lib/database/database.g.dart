@@ -386,6 +386,17 @@ class $CartItemTable extends CartItem
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _categoryCodeMeta = const VerificationMeta(
+    'categoryCode',
+  );
+  @override
+  late final GeneratedColumn<String> categoryCode = GeneratedColumn<String>(
+    'category_code',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _checkedMeta = const VerificationMeta(
     'checked',
   );
@@ -422,6 +433,7 @@ class $CartItemTable extends CartItem
     price,
     emoji,
     barCode,
+    categoryCode,
     checked,
     createdAt,
   ];
@@ -484,6 +496,15 @@ class $CartItemTable extends CartItem
         barCode.isAcceptableOrUnknown(data['bar_code']!, _barCodeMeta),
       );
     }
+    if (data.containsKey('category_code')) {
+      context.handle(
+        _categoryCodeMeta,
+        categoryCode.isAcceptableOrUnknown(
+          data['category_code']!,
+          _categoryCodeMeta,
+        ),
+      );
+    }
     if (data.containsKey('checked')) {
       context.handle(
         _checkedMeta,
@@ -533,6 +554,10 @@ class $CartItemTable extends CartItem
         DriftSqlType.string,
         data['${effectivePrefix}bar_code'],
       ),
+      categoryCode: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}category_code'],
+      ),
       checked: attachedDatabase.typeMapping.read(
         DriftSqlType.bool,
         data['${effectivePrefix}checked'],
@@ -558,6 +583,7 @@ class CartItemData extends DataClass implements Insertable<CartItemData> {
   final double price;
   final String emoji;
   final String? barCode;
+  final String? categoryCode;
   final bool checked;
   final DateTime createdAt;
   const CartItemData({
@@ -568,6 +594,7 @@ class CartItemData extends DataClass implements Insertable<CartItemData> {
     required this.price,
     required this.emoji,
     this.barCode,
+    this.categoryCode,
     required this.checked,
     required this.createdAt,
   });
@@ -584,6 +611,9 @@ class CartItemData extends DataClass implements Insertable<CartItemData> {
     map['emoji'] = Variable<String>(emoji);
     if (!nullToAbsent || barCode != null) {
       map['bar_code'] = Variable<String>(barCode);
+    }
+    if (!nullToAbsent || categoryCode != null) {
+      map['category_code'] = Variable<String>(categoryCode);
     }
     map['checked'] = Variable<bool>(checked);
     map['created_at'] = Variable<DateTime>(createdAt);
@@ -603,6 +633,9 @@ class CartItemData extends DataClass implements Insertable<CartItemData> {
       barCode: barCode == null && nullToAbsent
           ? const Value.absent()
           : Value(barCode),
+      categoryCode: categoryCode == null && nullToAbsent
+          ? const Value.absent()
+          : Value(categoryCode),
       checked: Value(checked),
       createdAt: Value(createdAt),
     );
@@ -621,6 +654,7 @@ class CartItemData extends DataClass implements Insertable<CartItemData> {
       price: serializer.fromJson<double>(json['price']),
       emoji: serializer.fromJson<String>(json['emoji']),
       barCode: serializer.fromJson<String?>(json['barCode']),
+      categoryCode: serializer.fromJson<String?>(json['categoryCode']),
       checked: serializer.fromJson<bool>(json['checked']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
     );
@@ -636,6 +670,7 @@ class CartItemData extends DataClass implements Insertable<CartItemData> {
       'price': serializer.toJson<double>(price),
       'emoji': serializer.toJson<String>(emoji),
       'barCode': serializer.toJson<String?>(barCode),
+      'categoryCode': serializer.toJson<String?>(categoryCode),
       'checked': serializer.toJson<bool>(checked),
       'createdAt': serializer.toJson<DateTime>(createdAt),
     };
@@ -649,6 +684,7 @@ class CartItemData extends DataClass implements Insertable<CartItemData> {
     double? price,
     String? emoji,
     Value<String?> barCode = const Value.absent(),
+    Value<String?> categoryCode = const Value.absent(),
     bool? checked,
     DateTime? createdAt,
   }) => CartItemData(
@@ -659,6 +695,7 @@ class CartItemData extends DataClass implements Insertable<CartItemData> {
     price: price ?? this.price,
     emoji: emoji ?? this.emoji,
     barCode: barCode.present ? barCode.value : this.barCode,
+    categoryCode: categoryCode.present ? categoryCode.value : this.categoryCode,
     checked: checked ?? this.checked,
     createdAt: createdAt ?? this.createdAt,
   );
@@ -671,6 +708,9 @@ class CartItemData extends DataClass implements Insertable<CartItemData> {
       price: data.price.present ? data.price.value : this.price,
       emoji: data.emoji.present ? data.emoji.value : this.emoji,
       barCode: data.barCode.present ? data.barCode.value : this.barCode,
+      categoryCode: data.categoryCode.present
+          ? data.categoryCode.value
+          : this.categoryCode,
       checked: data.checked.present ? data.checked.value : this.checked,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
     );
@@ -686,6 +726,7 @@ class CartItemData extends DataClass implements Insertable<CartItemData> {
           ..write('price: $price, ')
           ..write('emoji: $emoji, ')
           ..write('barCode: $barCode, ')
+          ..write('categoryCode: $categoryCode, ')
           ..write('checked: $checked, ')
           ..write('createdAt: $createdAt')
           ..write(')'))
@@ -701,6 +742,7 @@ class CartItemData extends DataClass implements Insertable<CartItemData> {
     price,
     emoji,
     barCode,
+    categoryCode,
     checked,
     createdAt,
   );
@@ -715,6 +757,7 @@ class CartItemData extends DataClass implements Insertable<CartItemData> {
           other.price == this.price &&
           other.emoji == this.emoji &&
           other.barCode == this.barCode &&
+          other.categoryCode == this.categoryCode &&
           other.checked == this.checked &&
           other.createdAt == this.createdAt);
 }
@@ -727,6 +770,7 @@ class CartItemCompanion extends UpdateCompanion<CartItemData> {
   final Value<double> price;
   final Value<String> emoji;
   final Value<String?> barCode;
+  final Value<String?> categoryCode;
   final Value<bool> checked;
   final Value<DateTime> createdAt;
   const CartItemCompanion({
@@ -737,6 +781,7 @@ class CartItemCompanion extends UpdateCompanion<CartItemData> {
     this.price = const Value.absent(),
     this.emoji = const Value.absent(),
     this.barCode = const Value.absent(),
+    this.categoryCode = const Value.absent(),
     this.checked = const Value.absent(),
     this.createdAt = const Value.absent(),
   });
@@ -748,6 +793,7 @@ class CartItemCompanion extends UpdateCompanion<CartItemData> {
     required double price,
     required String emoji,
     this.barCode = const Value.absent(),
+    this.categoryCode = const Value.absent(),
     this.checked = const Value.absent(),
     this.createdAt = const Value.absent(),
   }) : name = Value(name),
@@ -762,6 +808,7 @@ class CartItemCompanion extends UpdateCompanion<CartItemData> {
     Expression<double>? price,
     Expression<String>? emoji,
     Expression<String>? barCode,
+    Expression<String>? categoryCode,
     Expression<bool>? checked,
     Expression<DateTime>? createdAt,
   }) {
@@ -773,6 +820,7 @@ class CartItemCompanion extends UpdateCompanion<CartItemData> {
       if (price != null) 'price': price,
       if (emoji != null) 'emoji': emoji,
       if (barCode != null) 'bar_code': barCode,
+      if (categoryCode != null) 'category_code': categoryCode,
       if (checked != null) 'checked': checked,
       if (createdAt != null) 'created_at': createdAt,
     });
@@ -786,6 +834,7 @@ class CartItemCompanion extends UpdateCompanion<CartItemData> {
     Value<double>? price,
     Value<String>? emoji,
     Value<String?>? barCode,
+    Value<String?>? categoryCode,
     Value<bool>? checked,
     Value<DateTime>? createdAt,
   }) {
@@ -797,6 +846,7 @@ class CartItemCompanion extends UpdateCompanion<CartItemData> {
       price: price ?? this.price,
       emoji: emoji ?? this.emoji,
       barCode: barCode ?? this.barCode,
+      categoryCode: categoryCode ?? this.categoryCode,
       checked: checked ?? this.checked,
       createdAt: createdAt ?? this.createdAt,
     );
@@ -826,6 +876,9 @@ class CartItemCompanion extends UpdateCompanion<CartItemData> {
     if (barCode.present) {
       map['bar_code'] = Variable<String>(barCode.value);
     }
+    if (categoryCode.present) {
+      map['category_code'] = Variable<String>(categoryCode.value);
+    }
     if (checked.present) {
       map['checked'] = Variable<bool>(checked.value);
     }
@@ -845,6 +898,7 @@ class CartItemCompanion extends UpdateCompanion<CartItemData> {
           ..write('price: $price, ')
           ..write('emoji: $emoji, ')
           ..write('barCode: $barCode, ')
+          ..write('categoryCode: $categoryCode, ')
           ..write('checked: $checked, ')
           ..write('createdAt: $createdAt')
           ..write(')'))
@@ -1146,6 +1200,7 @@ typedef $$CartItemTableCreateCompanionBuilder =
       required double price,
       required String emoji,
       Value<String?> barCode,
+      Value<String?> categoryCode,
       Value<bool> checked,
       Value<DateTime> createdAt,
     });
@@ -1158,6 +1213,7 @@ typedef $$CartItemTableUpdateCompanionBuilder =
       Value<double> price,
       Value<String> emoji,
       Value<String?> barCode,
+      Value<String?> categoryCode,
       Value<bool> checked,
       Value<DateTime> createdAt,
     });
@@ -1220,6 +1276,11 @@ class $$CartItemTableFilterComposer
 
   ColumnFilters<String> get barCode => $composableBuilder(
     column: $table.barCode,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get categoryCode => $composableBuilder(
+    column: $table.categoryCode,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -1296,6 +1357,11 @@ class $$CartItemTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get categoryCode => $composableBuilder(
+    column: $table.categoryCode,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<bool> get checked => $composableBuilder(
     column: $table.checked,
     builder: (column) => ColumnOrderings(column),
@@ -1356,6 +1422,11 @@ class $$CartItemTableAnnotationComposer
 
   GeneratedColumn<String> get barCode =>
       $composableBuilder(column: $table.barCode, builder: (column) => column);
+
+  GeneratedColumn<String> get categoryCode => $composableBuilder(
+    column: $table.categoryCode,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<bool> get checked =>
       $composableBuilder(column: $table.checked, builder: (column) => column);
@@ -1422,6 +1493,7 @@ class $$CartItemTableTableManager
                 Value<double> price = const Value.absent(),
                 Value<String> emoji = const Value.absent(),
                 Value<String?> barCode = const Value.absent(),
+                Value<String?> categoryCode = const Value.absent(),
                 Value<bool> checked = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
               }) => CartItemCompanion(
@@ -1432,6 +1504,7 @@ class $$CartItemTableTableManager
                 price: price,
                 emoji: emoji,
                 barCode: barCode,
+                categoryCode: categoryCode,
                 checked: checked,
                 createdAt: createdAt,
               ),
@@ -1444,6 +1517,7 @@ class $$CartItemTableTableManager
                 required double price,
                 required String emoji,
                 Value<String?> barCode = const Value.absent(),
+                Value<String?> categoryCode = const Value.absent(),
                 Value<bool> checked = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
               }) => CartItemCompanion.insert(
@@ -1454,6 +1528,7 @@ class $$CartItemTableTableManager
                 price: price,
                 emoji: emoji,
                 barCode: barCode,
+                categoryCode: categoryCode,
                 checked: checked,
                 createdAt: createdAt,
               ),
