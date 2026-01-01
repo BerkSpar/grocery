@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grocery/daos/cart_dao.dart';
+import 'package:grocery/services/barcode_service.dart';
 import 'package:grocery/views/cart/scanner_screen.dart';
 import 'package:grocery/views/cart/widgets/add_cart_item_bottom_sheet.dart';
 import 'package:grocery/views/cart/widgets/barcode_scanner_button.dart';
@@ -28,13 +29,15 @@ class _CartScreenState extends State<CartScreen> {
       context,
     ).push(MaterialPageRoute(builder: (context) => ScannerScreen()));
 
+    final product = await getProduct(barcode.rawValue ?? '');
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       builder: (context) {
         return AddCartItemBottomSheet(
           barcode: barcode.rawValue,
-          name: barcode.rawValue,
+          name: product?.name ?? '',
         );
       },
     );
@@ -69,7 +72,7 @@ class _CartScreenState extends State<CartScreen> {
             CloseCartButton(onCloseCart: closeCart),
             const SizedBox(height: 16),
             StreamBuilder(
-              stream: context.read<CartDAO>().watchOpenCartUncheckedItems(),
+              stream: context.read<CartDAO>().watchOpenCartItemsToScan(),
               builder: (context, stream) {
                 return NextItemsList(items: stream.data ?? []);
               },

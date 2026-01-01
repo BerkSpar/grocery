@@ -342,10 +342,7 @@ class $CartItemTable extends CartItem
     'name',
     aliasedName,
     false,
-    additionalChecks: GeneratedColumn.checkTextLength(
-      minTextLength: 3,
-      maxTextLength: 32,
-    ),
+    additionalChecks: GeneratedColumn.checkTextLength(minTextLength: 3),
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
@@ -375,10 +372,6 @@ class $CartItemTable extends CartItem
     'emoji',
     aliasedName,
     false,
-    additionalChecks: GeneratedColumn.checkTextLength(
-      minTextLength: 1,
-      maxTextLength: 8,
-    ),
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
