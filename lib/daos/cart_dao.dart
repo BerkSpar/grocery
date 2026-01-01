@@ -93,6 +93,7 @@ class CartDAO {
   }
 
   void addExistingItemToOpenCart(
+    int id,
     String name,
     String quantity,
     double price,
@@ -101,6 +102,7 @@ class CartDAO {
     String? categoryCode,
   ) async {
     CartItemCompanion newItem = CartItemCompanion(
+      id: Value(id),
       name: Value(name),
       price: Value(price),
       quantity: Value(quantity),

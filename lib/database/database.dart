@@ -60,7 +60,10 @@ class AppDatabase extends _$AppDatabase {
       (cartId) =>
           (selectOnly(cartItem)
                 ..addColumns([cartItem.price.sum()])
-                ..where(cartItem.cartId.equals(cartId)))
+                ..where(
+                  cartItem.cartId.equals(cartId) &
+                      cartItem.checked.equals(true),
+                ))
               .watchSingle()
               .map((row) => row.read(cartItem.price.sum()) ?? 0.0),
     );
@@ -120,7 +123,7 @@ class AppDatabase extends _$AppDatabase {
 
     await (update(
       cartItem,
-    )..where((item) => item.id.equals(currentCart.id))).write(
+    )..where((item) => item.id.equals(updatedItem.id.value))).write(
       updatedItem.copyWith(cartId: Value(currentCart.id), checked: Value(true)),
     );
   }
