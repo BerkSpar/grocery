@@ -42,7 +42,7 @@ class _OpenCartButtonState extends State<OpenCartButton> {
           spacing: 8,
           children: [
             Text(
-              widget.canOpen ? 'Abrir o carrinho' : 'Entrar no mercado',
+              widget.canOpen ? 'Abrir o carrinho' : 'Iniciar mercado',
               style: TextStyle(fontSize: 16, fontWeight: .bold),
             ),
             widget.canOpen

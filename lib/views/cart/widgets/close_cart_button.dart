@@ -20,7 +20,7 @@ class CloseCartButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Segure para encerrar',
+              'Segure para encerrar o mercado',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             PhosphorIcon(PhosphorIconsBold.xCircle),

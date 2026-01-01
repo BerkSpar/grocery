@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grocery/daos/cart_dao.dart';
 import 'package:grocery/database/database.dart';
 import 'package:grocery/models/product.dart';
+import 'package:grocery/views/cart/scanner_screen.dart';
 import 'package:grocery/views/cart/widgets/add_cart_item_bottom_sheet.dart';
 import 'package:grocery/views/cart/widgets/barcode_scanner_button.dart';
 import 'package:grocery/views/cart/widgets/cart_list_bottom_sheet.dart';
@@ -34,11 +35,9 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   void openScanner([CartItemData? item]) async {
-    // final Product? product = await Navigator.of(
-    //   context,
-    // ).push(MaterialPageRoute(builder: (context) => ScannerScreen()));
-
-    final product = Product(name: 'teste', barCode: '123123');
+    final Product? product = await Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (context) => ScannerScreen()));
 
     if (product == null) return;
 

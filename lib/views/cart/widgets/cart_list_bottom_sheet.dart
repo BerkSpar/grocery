@@ -32,6 +32,13 @@ class CartListBottomSheet extends StatelessWidget {
           StreamBuilder(
             stream: context.read<CartDAO>().watchOpenCartItems(),
             builder: (context, stream) {
+              if ((stream.data ?? []).isEmpty) {
+                return Row(
+                  mainAxisAlignment: .center,
+                  children: [Text('Não há itens no carrinho')],
+                );
+              }
+
               return Column(
                 spacing: 16,
                 mainAxisSize: .min,
@@ -65,10 +72,19 @@ class CartListBottomSheet extends StatelessWidget {
                               ),
                             ),
                             Spacer(),
-                            PhosphorIcon(
-                              PhosphorIconsBold.trashSimple,
-                              color: Colors.red,
-                              size: 20,
+                            GestureDetector(
+                              onTap: () {
+                                context.read<CartDAO>().deleteCartItem(item.id);
+                              },
+                              child: SizedBox(
+                                height: 40,
+                                width: 40,
+                                child: PhosphorIcon(
+                                  PhosphorIconsBold.trashSimple,
+                                  color: Colors.red,
+                                  size: 20,
+                                ),
+                              ),
                             ),
                           ],
                         ),

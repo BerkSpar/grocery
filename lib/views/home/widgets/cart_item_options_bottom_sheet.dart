@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:grocery/daos/cart_dao.dart';
 import 'package:grocery/widgets/neo_card.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:provider/provider.dart';
 
 class CartItemOptionsBottomSheet extends StatelessWidget {
   final int id;
@@ -24,24 +26,14 @@ class CartItemOptionsBottomSheet extends StatelessWidget {
             SizedBox(width: 40, child: Divider(thickness: 3)),
             SizedBox(height: 12),
             NeoCard(
-              onTap: () {},
-              padding: EdgeInsetsGeometry.all(8),
-              child: Row(
-                mainAxisAlignment: .spaceBetween,
-                children: [
-                  Text(
-                    'Editar',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                  ),
-                  PhosphorIcon(PhosphorIconsBold.pencilSimple),
-                ],
-              ),
-            ),
-            SizedBox(height: 8),
-            NeoCard(
-              onTap: () {},
+              onTap: () {
+                context.read<CartDAO>().deleteCartItem(id);
+                Navigator.of(context).pop();
+              },
               padding: EdgeInsetsGeometry.all(8),
               backgroundColor: Colors.redAccent,
+              holdToConfirm: true,
+              holdProgressColor: Colors.red,
               child: Row(
                 mainAxisAlignment: .spaceBetween,
                 children: [
