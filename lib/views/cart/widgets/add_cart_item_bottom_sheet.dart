@@ -10,8 +10,18 @@ import 'package:provider/provider.dart';
 class AddCartItemBottomSheet extends StatefulWidget {
   final String? name;
   final String? barcode;
+  final String? quantity;
+  final String? categoryCode;
+  final int? id;
 
-  const AddCartItemBottomSheet({super.key, this.barcode, this.name});
+  const AddCartItemBottomSheet({
+    super.key,
+    this.barcode,
+    this.name,
+    this.quantity,
+    this.categoryCode,
+    this.id,
+  });
 
   @override
   State<AddCartItemBottomSheet> createState() => _AddCartItemBottomSheetState();
@@ -20,12 +30,14 @@ class AddCartItemBottomSheet extends StatefulWidget {
 class _AddCartItemBottomSheetState extends State<AddCartItemBottomSheet> {
   final _nameController = TextEditingController();
   final _priceController = TextEditingController();
+  final _quantityController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
 
     _nameController.text = widget.name ?? '';
+    _quantityController.text = widget.quantity ?? '';
   }
 
   @override
@@ -38,20 +50,33 @@ class _AddCartItemBottomSheetState extends State<AddCartItemBottomSheet> {
   void _submit() {
     final name = _nameController.text.trim();
     final priceText = _priceController.text.trim();
+    final quantity = _quantityController.text.trim();
 
     if (name.isEmpty || priceText.isEmpty) return;
 
     final price = double.tryParse(priceText.replaceAll(',', '.')) ?? 0.0;
     final emoji = EmojiSuggestionService.instance.suggestEmoji(name);
 
-    context.read<CartDAO>().createNewItemToOpenCart(
-      name,
-      '',
-      price,
-      emoji,
-      widget.barcode ?? '',
-      true,
-    );
+    if (widget.id != null) {
+      context.read<CartDAO>().addExistingItemToOpenCart(
+        widget.id!,
+        name,
+        quantity,
+        price,
+        emoji,
+        widget.barcode,
+        widget.categoryCode,
+      );
+    } else {
+      context.read<CartDAO>().createNewItemToOpenCart(
+        name,
+        quantity,
+        price,
+        emoji,
+        widget.barcode,
+        widget.categoryCode,
+      );
+    }
 
     Navigator.pop(context);
   }
@@ -75,11 +100,13 @@ class _AddCartItemBottomSheetState extends State<AddCartItemBottomSheet> {
               SizedBox(height: 12),
               NeoField(hintText: 'Nome do item', controller: _nameController),
               SizedBox(height: 8),
+              NeoField(hintText: 'Quantidade', controller: _quantityController),
+              SizedBox(height: 8),
               NeoField(
                 hintText: 'Preço',
                 controller: _priceController,
                 keyboardType: TextInputType.number,
-                prefixText: '\$ ',
+                prefixText: 'R\$ ',
                 inputFormatters: [CurrencyInputFormatter()],
               ),
               SizedBox(height: 16),

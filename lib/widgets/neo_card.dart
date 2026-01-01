@@ -8,6 +8,9 @@ class NeoCard extends StatefulWidget {
   final Widget child;
   final VoidCallback? onTap;
   final EdgeInsetsGeometry padding;
+  final bool holdToConfirm;
+  final Duration holdDuration;
+  final Color? holdProgressColor;
 
   const NeoCard({
     super.key,
@@ -17,31 +20,75 @@ class NeoCard extends StatefulWidget {
     this.shadowOffset = 2,
     this.onTap,
     this.padding = const EdgeInsets.all(16),
+    this.holdToConfirm = false,
+    this.holdDuration = const Duration(milliseconds: 1500),
+    this.holdProgressColor,
   });
 
   @override
   State<NeoCard> createState() => _NeoCardState();
 }
 
-class _NeoCardState extends State<NeoCard> {
+class _NeoCardState extends State<NeoCard> with SingleTickerProviderStateMixin {
   bool _isPressed = false;
+  AnimationController? _holdController;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.holdToConfirm) {
+      _holdController = AnimationController(
+        vsync: this,
+        duration: widget.holdDuration,
+      );
+      _holdController!.addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          HapticFeedback.heavyImpact();
+          widget.onTap?.call();
+          _holdController!.reset();
+          setState(() => _isPressed = false);
+        }
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _holdController?.dispose();
+    super.dispose();
+  }
+
+  void _onTapDown(TapDownDetails details) {
+    setState(() => _isPressed = true);
+    if (widget.holdToConfirm) {
+      HapticFeedback.selectionClick();
+      _holdController!.forward();
+    }
+  }
+
+  void _onTapUp(TapUpDetails details) {
+    if (widget.holdToConfirm) {
+      _holdController!.reset();
+    } else {
+      HapticFeedback.selectionClick();
+      widget.onTap?.call();
+    }
+    setState(() => _isPressed = false);
+  }
+
+  void _onTapCancel() {
+    if (widget.holdToConfirm) {
+      _holdController!.reset();
+    }
+    setState(() => _isPressed = false);
+  }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTapDown: widget.onTap != null
-          ? (_) => setState(() => _isPressed = true)
-          : null,
-      onTapUp: widget.onTap != null
-          ? (_) {
-              setState(() => _isPressed = false);
-              HapticFeedback.selectionClick();
-              widget.onTap?.call();
-            }
-          : null,
-      onTapCancel: widget.onTap != null
-          ? () => setState(() => _isPressed = false)
-          : null,
+      onTapDown: widget.onTap != null ? _onTapDown : null,
+      onTapUp: widget.onTap != null ? _onTapUp : null,
+      onTapCancel: widget.onTap != null ? _onTapCancel : null,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 50),
         transform: Matrix4.translationValues(
@@ -62,8 +109,33 @@ class _NeoCardState extends State<NeoCard> {
                   ),
                 ],
         ),
-        padding: widget.padding,
-        child: widget.child,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(5),
+          child: Stack(
+            children: [
+              if (widget.holdToConfirm && _holdController != null)
+                Positioned.fill(
+                  child: AnimatedBuilder(
+                    animation: _holdController!,
+                    builder: (context, child) {
+                      return FractionallySizedBox(
+                        alignment: Alignment.centerLeft,
+                        widthFactor: _holdController!.value,
+                        child: Container(
+                          color: widget.holdProgressColor ??
+                              Colors.white.withValues(alpha: 0.3),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              Padding(
+                padding: widget.padding,
+                child: widget.child,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

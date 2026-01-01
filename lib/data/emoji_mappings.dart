@@ -326,6 +326,10 @@ class EmojiMappings {
     'bagel': '🥯',
     'omelete': '🍳',
     'bacon e ovos': '🍳',
+    'teste': '🤖',
+    'seila': '🤔',
+    'teste de gravidez': '🤰',
+    'gift card': '👾',
   };
 
   static const String defaultEmoji = '🛒';

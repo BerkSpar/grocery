@@ -10,6 +10,7 @@ class BarcodeScannerButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
+      flex: 2,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24),
         child: NeoCard(

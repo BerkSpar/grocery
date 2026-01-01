@@ -14,12 +14,14 @@ class CloseCartButton extends StatelessWidget {
       child: NeoCard(
         onTap: onCloseCart,
         backgroundColor: Colors.redAccent,
+        holdToConfirm: true,
+        holdProgressColor: Colors.greenAccent,
         child: Row(
-          mainAxisAlignment: .spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Encerrar compras',
-              style: TextStyle(fontSize: 16, fontWeight: .bold),
+              'Segure para encerrar',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             PhosphorIcon(PhosphorIconsBold.xCircle),
           ],

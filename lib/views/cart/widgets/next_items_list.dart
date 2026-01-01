@@ -4,8 +4,13 @@ import 'package:grocery/widgets/neo_card.dart';
 
 class NextItemsList extends StatelessWidget {
   final List<CartItemData> items;
+  final Function(CartItemData item) onOpenScanner;
 
-  const NextItemsList({super.key, required this.items});
+  const NextItemsList({
+    super.key,
+    required this.items,
+    required this.onOpenScanner,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +27,7 @@ class NextItemsList extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         SizedBox(
-          height: 110,
+          height: 120,
           child: ListView.separated(
             padding: const EdgeInsets.symmetric(horizontal: 24),
             scrollDirection: Axis.horizontal,
@@ -30,10 +35,10 @@ class NextItemsList extends StatelessWidget {
               final item = items[index];
 
               return NeoCard(
-                onTap: () {},
+                onTap: () => onOpenScanner(item),
                 backgroundColor: Colors.white,
                 child: SizedBox(
-                  width: 80,
+                  width: 100,
                   child: Column(
                     children: [
                       Text(item.emoji, style: TextStyle(fontSize: 24)),

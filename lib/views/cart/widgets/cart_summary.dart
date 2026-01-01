@@ -4,8 +4,9 @@ import 'package:intl/intl.dart';
 
 class CartSummary extends StatelessWidget {
   final double totalValue;
+  final VoidCallback onTap;
 
-  const CartSummary({super.key, required this.totalValue});
+  const CartSummary({super.key, required this.totalValue, required this.onTap});
 
   static final _currencyFormat = NumberFormat.currency(
     locale: 'pt_BR',
@@ -16,9 +17,11 @@ class CartSummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
+      flex: 1,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24),
         child: NeoCard(
+          onTap: onTap,
           backgroundColor: Colors.greenAccent,
           child: SizedBox(
             width: double.maxFinite,
