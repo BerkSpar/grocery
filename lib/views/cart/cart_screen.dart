@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grocery/daos/cart_dao.dart';
+import 'package:grocery/views/cart/scanner_screen.dart';
 import 'package:grocery/views/cart/widgets/barcode_scanner_button.dart';
 import 'package:grocery/views/cart/widgets/cart_summary.dart';
 import 'package:grocery/views/cart/widgets/close_cart_button.dart';
@@ -18,6 +19,12 @@ class _CartScreenState extends State<CartScreen> {
   void closeCart() {
     context.read<CartDAO>().closeCart(DateTime.now());
     Navigator.of(context).pop();
+  }
+
+  void openScanner() {
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (context) => ScannerScreen()));
   }
 
   @override
@@ -43,7 +50,7 @@ class _CartScreenState extends State<CartScreen> {
               },
             ),
             const SizedBox(height: 16),
-            BarcodeScannerButton(onTap: () {}),
+            BarcodeScannerButton(onTap: openScanner),
             const SizedBox(height: 16),
             CloseCartButton(onCloseCart: closeCart),
             const SizedBox(height: 16),

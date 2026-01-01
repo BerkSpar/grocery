@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:grocery/daos/cart_dao.dart';
 import 'package:grocery/views/home/widgets/cart_home_summary.dart';
+import 'package:grocery/views/home/widgets/cart_item_options_bottom_sheet.dart';
 import 'package:grocery/views/home/widgets/cart_items_list.dart';
 import 'package:grocery/views/home/widgets/create_cart_item_bottom_sheet.dart';
 import 'package:grocery/views/home/widgets/open_cart_button.dart';
@@ -20,6 +21,16 @@ class _HomeScreenState extends State<HomeScreen> {
       isScrollControlled: true,
       builder: (context) {
         return CreateCartItemBottomSheet();
+      },
+    );
+  }
+
+  void showCartItemOptions(int cartItemId) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return CartItemOptionsBottomSheet(id: cartItemId);
       },
     );
   }
@@ -55,6 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       items: stream.data ?? [],
                       onAddNewItem: createNewCartItem,
                       onItemToggled: toggleCartItem,
+                      onTapOption: showCartItemOptions,
                     );
                   },
                 ),

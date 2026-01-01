@@ -52,34 +52,36 @@ class _CreateCartItemBottomSheetState extends State<CreateCartItemBottomSheet> {
           right: 24,
           bottom: MediaQuery.of(context).viewInsets.bottom + 16,
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(height: 4),
-            SizedBox(width: 40, child: Divider(thickness: 3)),
-            SizedBox(height: 12),
-            NeoField(hintText: 'Nome do item', controller: _nameController),
-            SizedBox(height: 8),
-            NeoField(hintText: 'Quantidade', controller: _quantityController),
-            SizedBox(height: 16),
-            NeoCard(
-              onTap: _submit,
-              padding: EdgeInsetsGeometry.all(8),
-              child: Row(
-                mainAxisAlignment: .spaceBetween,
-                children: [
-                  Text(
-                    'Adicionar à lista',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
+        child: SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(height: 4),
+              SizedBox(width: 40, child: Divider(thickness: 3)),
+              SizedBox(height: 12),
+              NeoField(hintText: 'Nome do item', controller: _nameController),
+              SizedBox(height: 8),
+              NeoField(hintText: 'Quantidade', controller: _quantityController),
+              SizedBox(height: 16),
+              NeoCard(
+                onTap: _submit,
+                padding: EdgeInsetsGeometry.all(8),
+                child: Row(
+                  mainAxisAlignment: .spaceBetween,
+                  children: [
+                    Text(
+                      'Adicionar à lista',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
                     ),
-                  ),
-                  PhosphorIcon(PhosphorIconsBold.plusCircle),
-                ],
+                    PhosphorIcon(PhosphorIconsBold.plusCircle),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

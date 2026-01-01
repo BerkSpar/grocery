@@ -6,6 +6,7 @@ import 'package:grocery/widgets/neo_list_tile.dart';
 class CartItemsList extends StatelessWidget {
   final VoidCallback onAddNewItem;
   final Function(int id) onItemToggled;
+  final Function(int id) onTapOption;
   final List<CartItemData> items;
 
   const CartItemsList({
@@ -13,6 +14,7 @@ class CartItemsList extends StatelessWidget {
     required this.onAddNewItem,
     required this.items,
     required this.onItemToggled,
+    required this.onTapOption,
   });
 
   @override
@@ -83,6 +85,7 @@ class CartItemsList extends StatelessWidget {
                     subtitle: item.quantity,
                     checked: item.checked,
                     onTap: () => onItemToggled(item.id),
+                    onTapOption: () => onTapOption(item.id),
                   );
                 },
                 separatorBuilder: (_, _) => SizedBox(height: 16),

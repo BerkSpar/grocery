@@ -8,6 +8,7 @@ class NeoListTile extends StatefulWidget {
   final bool checked;
   final String emoji;
   final VoidCallback onTap;
+  final VoidCallback onTapOption;
 
   const NeoListTile({
     super.key,
@@ -16,6 +17,7 @@ class NeoListTile extends StatefulWidget {
     required this.checked,
     required this.emoji,
     required this.onTap,
+    required this.onTapOption,
   });
 
   @override
@@ -124,7 +126,9 @@ class _NeoListTileState extends State<NeoListTile>
                 widget.title,
                 style: TextStyle(
                   fontSize: 16,
-                  decoration: widget.checked ? TextDecoration.lineThrough : null,
+                  decoration: widget.checked
+                      ? TextDecoration.lineThrough
+                      : null,
                 ),
               ),
               Text(
@@ -132,13 +136,22 @@ class _NeoListTileState extends State<NeoListTile>
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w200,
-                  decoration: widget.checked ? TextDecoration.lineThrough : null,
+                  decoration: widget.checked
+                      ? TextDecoration.lineThrough
+                      : null,
                 ),
               ),
             ],
           ),
           Spacer(),
-          PhosphorIcon(PhosphorIcons.dotsThreeOutlineVertical()),
+          GestureDetector(
+            onTap: widget.onTapOption,
+            child: SizedBox(
+              height: 40,
+              width: 40,
+              child: PhosphorIcon(PhosphorIcons.dotsThreeOutlineVertical()),
+            ),
+          ),
         ],
       ),
     );
