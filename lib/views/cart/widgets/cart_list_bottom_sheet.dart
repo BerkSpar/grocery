@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:grocery/daos/cart_dao.dart';
 import 'package:grocery/widgets/neo_card.dart';
 import 'package:intl/intl.dart';
@@ -75,6 +76,7 @@ class CartListBottomSheet extends StatelessWidget {
                             GestureDetector(
                               onTap: () {
                                 context.read<CartDAO>().deleteCartItem(item.id);
+                                HapticFeedback.lightImpact();
                               },
                               child: SizedBox(
                                 height: 40,

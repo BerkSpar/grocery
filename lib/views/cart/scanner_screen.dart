@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:grocery/services/barcode_service.dart';
 import 'package:grocery/widgets/neo_card.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -40,6 +41,8 @@ class _ScannerScreenState extends State<ScannerScreen>
   void _handleBarcode(BarcodeCapture barcodes) async {
     if (!canHandleBarcode) return;
     canHandleBarcode = false;
+
+    HapticFeedback.vibrate();
 
     setState(() {
       loadingText = 'Analisando o produto...';
