@@ -80,8 +80,7 @@ class EmojiMappings {
     'alcatra': '🥩',
     'patinho': '🥩',
     'musculo': '🥩',
-    'figado': '🫀',
-    'coracao': '🫀',
+    'figado': '🥩',
     'moela': '🍗',
     'peru': '🦃',
     'pato': '🦆',
@@ -330,6 +329,7 @@ class EmojiMappings {
     'seila': '🤔',
     'teste de gravidez': '🤰',
     'gift card': '👾',
+    'galinha': '🐔',
   };
 
   static const String defaultEmoji = '🛒';
