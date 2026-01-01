@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class NeoField extends StatefulWidget {
   final String? hintText;
@@ -6,6 +7,9 @@ class NeoField extends StatefulWidget {
   final Color backgroundColor;
   final Color shadowColor;
   final double shadowOffset;
+  final TextInputType? keyboardType;
+  final String? prefixText;
+  final List<TextInputFormatter>? inputFormatters;
 
   const NeoField({
     super.key,
@@ -14,6 +18,9 @@ class NeoField extends StatefulWidget {
     this.backgroundColor = Colors.white,
     this.shadowColor = Colors.black,
     this.shadowOffset = 4,
+    this.keyboardType,
+    this.prefixText,
+    this.inputFormatters,
   });
 
   @override
@@ -66,8 +73,17 @@ class _NeoFieldState extends State<NeoField> {
       child: TextField(
         controller: widget.controller,
         focusNode: _focusNode,
+        keyboardType: widget.keyboardType,
+        inputFormatters: widget.inputFormatters,
         decoration: InputDecoration(
           hintText: widget.hintText,
+          prefixIcon: widget.prefixText != null
+              ? Padding(
+                  padding: const EdgeInsets.only(left: 16),
+                  child: Text(widget.prefixText!),
+                )
+              : null,
+          prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 16,
             vertical: 12,

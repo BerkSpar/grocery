@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:grocery/daos/cart_dao.dart';
 import 'package:grocery/views/cart/scanner_screen.dart';
+import 'package:grocery/views/cart/widgets/add_cart_item_bottom_sheet.dart';
 import 'package:grocery/views/cart/widgets/barcode_scanner_button.dart';
 import 'package:grocery/views/cart/widgets/cart_summary.dart';
 import 'package:grocery/views/cart/widgets/close_cart_button.dart';
 import 'package:grocery/views/cart/widgets/next_items_list.dart';
 import 'package:grocery/views/cart/widgets/timer_header.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
 
 class CartScreen extends StatefulWidget {
@@ -21,15 +23,27 @@ class _CartScreenState extends State<CartScreen> {
     Navigator.of(context).pop();
   }
 
-  void openScanner() {
-    Navigator.of(
+  void openScanner() async {
+    final Barcode barcode = await Navigator.of(
       context,
     ).push(MaterialPageRoute(builder: (context) => ScannerScreen()));
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return AddCartItemBottomSheet(
+          barcode: barcode.rawValue,
+          name: barcode.rawValue,
+        );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: .start,
