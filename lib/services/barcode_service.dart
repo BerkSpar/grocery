@@ -19,11 +19,14 @@ Future<Product?> getProduct(String barCode) async {
     Product product = Product(
       name: rawData['description'],
       barCode: barCode,
-      categoryCode: rawData['ncm']['code'],
+      categoryCode: rawData['category']?['id']?.toString(),
     );
+
+    print(product);
 
     return product;
   } catch (e) {
+    print(e);
     return null;
   }
 }

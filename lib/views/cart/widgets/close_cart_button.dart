@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grocery/extensions/context_extensions.dart';
 import 'package:grocery/widgets/neo_card.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -20,7 +21,7 @@ class CloseCartButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Segure para encerrar o mercado',
+              context.l10n.holdToFinish,
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             PhosphorIcon(PhosphorIconsBold.xCircle),

@@ -7,18 +7,19 @@ class EmojiSuggestionService {
 
   EmojiSuggestionService._();
 
-  String suggestEmoji(String itemName) {
+  String suggestEmoji(String itemName, {String languageCode = 'en'}) {
     if (itemName.isEmpty) return EmojiMappings.defaultEmoji;
 
     final normalized = _normalizeText(itemName);
+    final keywordMap = EmojiMappings.getKeywordMap(languageCode);
 
-    final exactMatch = EmojiMappings.keywordToEmoji[normalized];
+    final exactMatch = keywordMap[normalized];
     if (exactMatch != null) return exactMatch;
 
-    final containsMatch = _searchByContains(normalized);
+    final containsMatch = _searchByContains(normalized, keywordMap);
     if (containsMatch != null) return containsMatch;
 
-    final fuzzyMatch = _searchByFuzzyMatch(normalized);
+    final fuzzyMatch = _searchByFuzzyMatch(normalized, keywordMap);
     if (fuzzyMatch != null) return fuzzyMatch;
 
     return EmojiMappings.defaultEmoji;
@@ -36,8 +37,8 @@ class EmojiSuggestionService {
         .trim();
   }
 
-  String? _searchByContains(String normalized) {
-    for (final entry in EmojiMappings.keywordToEmoji.entries) {
+  String? _searchByContains(String normalized, Map<String, String> keywordMap) {
+    for (final entry in keywordMap.entries) {
       if (normalized.contains(entry.key) || entry.key.contains(normalized)) {
         return entry.value;
       }
@@ -45,12 +46,12 @@ class EmojiSuggestionService {
     return null;
   }
 
-  String? _searchByFuzzyMatch(String normalized) {
+  String? _searchByFuzzyMatch(String normalized, Map<String, String> keywordMap) {
     const int threshold = 2;
     String? bestMatch;
     int bestDistance = threshold + 1;
 
-    for (final entry in EmojiMappings.keywordToEmoji.entries) {
+    for (final entry in keywordMap.entries) {
       final distance = _levenshteinDistance(normalized, entry.key);
       if (distance < bestDistance) {
         bestDistance = distance;

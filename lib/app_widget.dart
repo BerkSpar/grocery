@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:grocery/l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:grocery/daos/cart_dao.dart';
 import 'package:grocery/views/home/home_screen.dart';
@@ -12,7 +14,18 @@ class GroceryApp extends StatelessWidget {
     return Provider(
       create: (_) => CartDAO(),
       child: MaterialApp(
-        title: 'Grocery',
+        onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
+        debugShowCheckedModeBanner: false,
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('en'),
+          Locale('pt'),
+        ],
         theme: ThemeData(
           colorScheme: .fromSeed(seedColor: Colors.deepPurple),
           textTheme: GoogleFonts.robotoCondensedTextTheme(),

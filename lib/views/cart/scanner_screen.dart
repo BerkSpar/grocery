@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:grocery/extensions/context_extensions.dart';
 import 'package:grocery/services/barcode_service.dart';
 import 'package:grocery/widgets/neo_card.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -18,7 +19,7 @@ class _ScannerScreenState extends State<ScannerScreen>
   late final Animation<double> _scanAnimation;
   bool canHandleBarcode = true;
 
-  String loadingText = 'Coloque o código de barras aqui';
+  String? loadingText;
 
   @override
   void initState() {
@@ -30,6 +31,12 @@ class _ScannerScreenState extends State<ScannerScreen>
     _scanAnimation = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(parent: _scanController, curve: Curves.easeInOut),
     );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    loadingText ??= context.l10n.placeBarcode;
   }
 
   @override
@@ -45,7 +52,7 @@ class _ScannerScreenState extends State<ScannerScreen>
     HapticFeedback.vibrate();
 
     setState(() {
-      loadingText = 'Analisando o produto...';
+      loadingText = context.l10n.analyzingProduct;
     });
 
     final barcode = barcodes.barcodes.firstOrNull;
@@ -89,7 +96,7 @@ class _ScannerScreenState extends State<ScannerScreen>
                   ),
                 ),
                 const SizedBox(height: 8),
-                Text(loadingText, style: TextStyle(color: Colors.white)),
+                Text(loadingText!, style: TextStyle(color: Colors.white)),
               ],
             ),
           ),

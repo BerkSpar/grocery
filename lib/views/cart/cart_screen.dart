@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:grocery/daos/cart_dao.dart';
 import 'package:grocery/database/database.dart';
+import 'package:grocery/extensions/context_extensions.dart';
 import 'package:grocery/models/product.dart';
 import 'package:grocery/views/cart/scanner_screen.dart';
 import 'package:grocery/views/cart/widgets/add_cart_item_bottom_sheet.dart';
@@ -47,7 +48,7 @@ class _CartScreenState extends State<CartScreen> {
       builder: (context) {
         return AddCartItemBottomSheet(
           barcode: product.barCode,
-          name: item?.name ?? product.name ?? 'Sem nome',
+          name: item?.name ?? product.name ?? context.l10n.noName,
           quantity: item?.quantity,
           id: item?.id,
           categoryCode: item?.categoryCode,

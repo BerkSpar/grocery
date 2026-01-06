@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:grocery/daos/cart_dao.dart';
+import 'package:grocery/extensions/context_extensions.dart';
 import 'package:grocery/widgets/neo_card.dart';
 import 'package:intl/intl.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
 
-class CartListBottomSheet extends StatelessWidget {
+class CartListBottomSheet extends StatefulWidget {
   const CartListBottomSheet({super.key});
 
-  static final _currencyFormat = NumberFormat.currency(
-    locale: 'pt_BR',
-    symbol: 'R\$',
+  @override
+  State<CartListBottomSheet> createState() => _CartListBottomSheetState();
+}
+
+class _CartListBottomSheetState extends State<CartListBottomSheet> {
+  late final _currencyFormat = NumberFormat.currency(
+    locale: Localizations.localeOf(context).languageCode,
+    symbol: context.l10n.prefixMoneySymbol,
     decimalDigits: 2,
   );
 
@@ -36,7 +42,7 @@ class CartListBottomSheet extends StatelessWidget {
               if ((stream.data ?? []).isEmpty) {
                 return Row(
                   mainAxisAlignment: .center,
-                  children: [Text('Não há itens no carrinho')],
+                  children: [Text(context.l10n.noItemsInCart)],
                 );
               }
 
@@ -54,7 +60,7 @@ class CartListBottomSheet extends StatelessWidget {
                         child: Row(
                           crossAxisAlignment: .center,
                           children: [
-                            Text(item.emoji, style: TextStyle(fontSize: 20)),
+                            Text(item.emoji, style: TextStyle(fontSize: 30)),
                             SizedBox(width: 8),
                             Expanded(
                               child: Column(
@@ -72,7 +78,6 @@ class CartListBottomSheet extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            Spacer(),
                             GestureDetector(
                               onTap: () {
                                 context.read<CartDAO>().deleteCartItem(item.id);

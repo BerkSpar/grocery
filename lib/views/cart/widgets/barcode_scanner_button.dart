@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grocery/extensions/context_extensions.dart';
 import 'package:grocery/widgets/neo_card.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -23,7 +24,7 @@ class BarcodeScannerButton extends StatelessWidget {
                 PhosphorIcon(PhosphorIconsBold.barcode, size: 64),
                 const SizedBox(height: 16),
                 Text(
-                  'Ler código de barras',
+                  context.l10n.readBarcode,
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ],

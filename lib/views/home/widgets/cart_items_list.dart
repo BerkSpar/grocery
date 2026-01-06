@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grocery/database/database.dart';
+import 'package:grocery/extensions/context_extensions.dart';
 import 'package:grocery/widgets/neo_card.dart';
 import 'package:grocery/widgets/neo_list_tile.dart';
 
@@ -28,7 +29,7 @@ class CartItemsList extends StatelessWidget {
               mainAxisSize: .min,
               children: [
                 Text(
-                  'Você ainda não tem itens na\nsua lista de compra',
+                  context.l10n.emptyListMessage,
                   style: TextStyle(fontSize: 20),
                   textAlign: .center,
                 ),
@@ -37,7 +38,7 @@ class CartItemsList extends StatelessWidget {
                   onTap: onAddNewItem,
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   child: Text(
-                    'adicionar',
+                    context.l10n.add,
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                 ),
@@ -57,7 +58,7 @@ class CartItemsList extends StatelessWidget {
               mainAxisAlignment: .spaceBetween,
               children: [
                 Text(
-                  'Lista de compras',
+                  context.l10n.shoppingList,
                   style: TextStyle(fontWeight: .bold, fontSize: 20),
                 ),
                 NeoCard(
@@ -66,7 +67,7 @@ class CartItemsList extends StatelessWidget {
                   shadowOffset: 4,
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   child: Text(
-                    'adicionar',
+                    context.l10n.add,
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                 ),

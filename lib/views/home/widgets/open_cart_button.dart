@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:grocery/daos/cart_dao.dart';
+import 'package:grocery/extensions/context_extensions.dart';
 import 'package:grocery/views/cart/cart_screen.dart';
 import 'package:grocery/widgets/neo_card.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -42,7 +43,7 @@ class _OpenCartButtonState extends State<OpenCartButton> {
           spacing: 8,
           children: [
             Text(
-              widget.canOpen ? 'Abrir o carrinho' : 'Iniciar mercado',
+              widget.canOpen ? context.l10n.openCart : context.l10n.startShopping,
               style: TextStyle(fontSize: 16, fontWeight: .bold),
             ),
             widget.canOpen

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grocery/daos/cart_dao.dart';
+import 'package:grocery/extensions/context_extensions.dart';
 import 'package:grocery/services/emoji_suggestion_service.dart';
 import 'package:grocery/utils/currency_input_formatter.dart';
 import 'package:grocery/widgets/neo_card.dart';
@@ -55,7 +56,11 @@ class _AddCartItemBottomSheetState extends State<AddCartItemBottomSheet> {
     if (name.isEmpty || priceText.isEmpty) return;
 
     final price = double.tryParse(priceText.replaceAll(',', '.')) ?? 0.0;
-    final emoji = EmojiSuggestionService.instance.suggestEmoji(name);
+    final locale = Localizations.localeOf(context).languageCode;
+    final emoji = EmojiSuggestionService.instance.suggestEmoji(
+      name,
+      languageCode: locale,
+    );
 
     if (widget.id != null) {
       context.read<CartDAO>().addExistingItemToOpenCart(
@@ -98,15 +103,21 @@ class _AddCartItemBottomSheetState extends State<AddCartItemBottomSheet> {
               SizedBox(height: 4),
               SizedBox(width: 40, child: Divider(thickness: 3)),
               SizedBox(height: 12),
-              NeoField(hintText: 'Nome do item', controller: _nameController),
-              SizedBox(height: 8),
-              NeoField(hintText: 'Quantidade', controller: _quantityController),
+              NeoField(
+                hintText: context.l10n.itemName,
+                controller: _nameController,
+              ),
               SizedBox(height: 8),
               NeoField(
-                hintText: 'Preço',
+                hintText: context.l10n.quantity,
+                controller: _quantityController,
+              ),
+              SizedBox(height: 8),
+              NeoField(
+                hintText: context.l10n.price,
                 controller: _priceController,
                 keyboardType: TextInputType.number,
-                prefixText: 'R\$ ',
+                prefixText: context.l10n.prefixMoneySymbol,
                 inputFormatters: [CurrencyInputFormatter()],
               ),
               SizedBox(height: 16),
@@ -117,7 +128,7 @@ class _AddCartItemBottomSheetState extends State<AddCartItemBottomSheet> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Adicionar ao carrinho',
+                      context.l10n.addToCart,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
