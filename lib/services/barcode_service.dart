@@ -27,8 +27,8 @@ Future<Product?> getProduct(String barCode) async {
     return product;
   } on Exception catch (e) {
     log(e.toString());
-    Product emtpyProduct = Product(name: '', barCode: '');
+    Product emptyProduct = Product(name: '', barCode: '');
 
-    return emtpyProduct;
+    return emptyProduct;
   }
 }
