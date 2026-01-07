@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:grocery/models/product.dart';
 
@@ -22,11 +24,11 @@ Future<Product?> getProduct(String barCode) async {
       categoryCode: rawData['category']?['id']?.toString(),
     );
 
-    print(product);
-
     return product;
-  } catch (e) {
-    print(e);
-    return null;
+  } on Exception catch (e) {
+    log(e.toString());
+    Product emtpyProduct = Product(name: '', barCode: '');
+
+    return emtpyProduct;
   }
 }
