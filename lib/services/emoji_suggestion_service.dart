@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:grocery/data/emoji_mappings.dart';
+import 'package:cartly/data/emoji_mappings.dart';
 
 class EmojiSuggestionService {
   static final EmojiSuggestionService instance = EmojiSuggestionService._();
@@ -46,7 +46,10 @@ class EmojiSuggestionService {
     return null;
   }
 
-  String? _searchByFuzzyMatch(String normalized, Map<String, String> keywordMap) {
+  String? _searchByFuzzyMatch(
+    String normalized,
+    Map<String, String> keywordMap,
+  ) {
     const int threshold = 2;
     String? bestMatch;
     int bestDistance = threshold + 1;

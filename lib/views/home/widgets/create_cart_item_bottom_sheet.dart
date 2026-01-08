@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:grocery/daos/cart_dao.dart';
-import 'package:grocery/extensions/context_extensions.dart';
-import 'package:grocery/services/emoji_suggestion_service.dart';
-import 'package:grocery/widgets/neo_card.dart';
-import 'package:grocery/widgets/neo_field.dart';
+import 'package:cartly/daos/cart_dao.dart';
+import 'package:cartly/extensions/context_extensions.dart';
+import 'package:cartly/services/emoji_suggestion_service.dart';
+import 'package:cartly/widgets/neo_card.dart';
+import 'package:cartly/widgets/neo_field.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -33,7 +33,10 @@ class _CreateCartItemBottomSheetState extends State<CreateCartItemBottomSheet> {
     if (name.isEmpty || quantity.isEmpty) return;
 
     final locale = Localizations.localeOf(context).languageCode;
-    final emoji = EmojiSuggestionService.instance.suggestEmoji(name, languageCode: locale);
+    final emoji = EmojiSuggestionService.instance.suggestEmoji(
+      name,
+      languageCode: locale,
+    );
 
     context.read<CartDAO>().createPreCartItem(
       name: name,
@@ -61,9 +64,15 @@ class _CreateCartItemBottomSheetState extends State<CreateCartItemBottomSheet> {
               SizedBox(height: 4),
               SizedBox(width: 40, child: Divider(thickness: 3)),
               SizedBox(height: 12),
-              NeoField(hintText: context.l10n.itemName, controller: _nameController),
+              NeoField(
+                hintText: context.l10n.itemName,
+                controller: _nameController,
+              ),
               SizedBox(height: 8),
-              NeoField(hintText: context.l10n.quantity, controller: _quantityController),
+              NeoField(
+                hintText: context.l10n.quantity,
+                controller: _quantityController,
+              ),
               SizedBox(height: 16),
               NeoCard(
                 onTap: _submit,

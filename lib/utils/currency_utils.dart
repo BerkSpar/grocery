@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:grocery/extensions/context_extensions.dart';
+import 'package:cartly/extensions/context_extensions.dart';
 import 'package:intl/intl.dart';
 
 class CurrencyUtils {

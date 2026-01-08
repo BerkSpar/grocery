@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:grocery/models/product.dart';
+import 'package:cartly/models/product.dart';
 
 Future<Product?> getProduct(String barCode) async {
   final dio = Dio();
