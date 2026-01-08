@@ -40,58 +40,64 @@ class _CartListBottomSheetState extends State<CartListBottomSheet> {
                 );
               }
 
-              return Column(
-                spacing: 16,
-                mainAxisSize: .min,
-                children: (stream.data ?? [])
-                    .map(
-                      (item) => NeoCard(
-                        padding: EdgeInsetsGeometry.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
-                        ),
-                        backgroundColor: Colors.white,
-                        child: Row(
-                          crossAxisAlignment: .center,
-                          children: [
-                            Text(item.emoji, style: TextStyle(fontSize: 30)),
-                            SizedBox(width: 8),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: .start,
-                                children: [
-                                  Text(
-                                    item.name,
-                                    maxLines: 1,
-                                    overflow: .ellipsis,
-                                  ),
-                                  Text(
-                                    '${item.quantity} • ${CurrencyUtils.getFormattedLocalizedPrice(context, item.price)}',
-                                    style: TextStyle(fontSize: 12),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                context.read<CartDAO>().deleteCartItem(item.id);
-                                HapticFeedback.lightImpact();
-                              },
-                              child: SizedBox(
-                                height: 40,
-                                width: 40,
-                                child: PhosphorIcon(
-                                  PhosphorIconsBold.trashSimple,
-                                  color: Colors.red,
-                                  size: 20,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+              return Flexible(
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  physics: BouncingScrollPhysics(),
+                  itemCount: (stream.data ?? []).length,
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: 16),
+
+                  itemBuilder: (context, index) {
+                    final item = stream.data![index];
+
+                    return NeoCard(
+                      padding: EdgeInsetsGeometry.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
                       ),
-                    )
-                    .toList(),
+                      backgroundColor: Colors.white,
+                      child: Row(
+                        crossAxisAlignment: .center,
+                        children: [
+                          Text(item.emoji, style: TextStyle(fontSize: 30)),
+                          SizedBox(width: 8),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: .start,
+                              children: [
+                                Text(
+                                  item.name,
+                                  maxLines: 1,
+                                  overflow: .ellipsis,
+                                ),
+                                Text(
+                                  '${item.quantity} • ${CurrencyUtils.getFormattedLocalizedPrice(context, item.price)}',
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                              ],
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              context.read<CartDAO>().deleteCartItem(item.id);
+                              HapticFeedback.lightImpact();
+                            },
+                            child: SizedBox(
+                              height: 40,
+                              width: 40,
+                              child: PhosphorIcon(
+                                PhosphorIconsBold.trashSimple,
+                                color: Colors.red,
+                                size: 20,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
               );
             },
           ),
