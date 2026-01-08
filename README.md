@@ -1,4 +1,4 @@
-# grocery
+# cartly
 
 A new Flutter project.
 

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:grocery/l10n/app_localizations.dart';
+import 'package:cartly/l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:grocery/daos/cart_dao.dart';
-import 'package:grocery/views/home/home_screen.dart';
+import 'package:cartly/daos/cart_dao.dart';
+import 'package:cartly/views/home/home_screen.dart';
 import 'package:provider/provider.dart';
 
-class GroceryApp extends StatelessWidget {
-  const GroceryApp({super.key});
+class CartlyApp extends StatelessWidget {
+  const CartlyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +22,7 @@ class GroceryApp extends StatelessWidget {
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
         ],
-        supportedLocales: const [
-          Locale('en'),
-          Locale('pt'),
-        ],
+        supportedLocales: const [Locale('en'), Locale('pt')],
         theme: ThemeData(
           colorScheme: .fromSeed(seedColor: Colors.deepPurple),
           textTheme: GoogleFonts.robotoCondensedTextTheme(),

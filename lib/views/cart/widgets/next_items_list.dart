@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:grocery/database/database.dart';
-import 'package:grocery/extensions/context_extensions.dart';
-import 'package:grocery/widgets/neo_card.dart';
+import 'package:cartly/database/database.dart';
+import 'package:cartly/extensions/context_extensions.dart';
+import 'package:cartly/widgets/neo_card.dart';
 
 class NextItemsList extends StatelessWidget {
   final List<CartItemData> items;

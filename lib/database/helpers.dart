@@ -2,7 +2,7 @@
 
 import 'dart:async';
 
-import 'package:grocery/database/database.dart';
+import 'package:cartly/database/database.dart';
 
 /// Creates a stream that reacts to the currently open cart and switches
 /// its inner subscription whenever the open cart changes.

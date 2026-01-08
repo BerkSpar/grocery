@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:grocery/helpers/haptic_helper.dart';
+import 'package:cartly/helpers/haptic_helper.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class NeoListTile extends StatefulWidget {

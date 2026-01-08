@@ -1,6 +1,6 @@
 {
   "@@locale": "pt",
-  "appTitle": "Grocery",
+  "appTitle": "Cartly",
   "emptyListMessage": "Você ainda não tem itens na\nsua lista de compra",
   "add": "adicionar",
   "shoppingList": "Lista de compras",
@@ -22,3 +22,4 @@
   "noName": "Sem nome",
   "prefixMoneySymbol": "R$"
 }
+

@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:grocery/data/emoji_mappings.dart';
+import 'package:cartly/data/emoji_mappings.dart';
 
 class EmojiSuggestionService {
   static final EmojiSuggestionService instance = EmojiSuggestionService._();
