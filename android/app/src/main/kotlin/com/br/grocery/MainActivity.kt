@@ -1,4 +1,4 @@
-package br.com.grocery
+package br.com.cartly
 
 import io.flutter.embedding.android.FlutterActivity
 
