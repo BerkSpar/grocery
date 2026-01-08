@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:grocery/daos/cart_dao.dart';
 import 'package:grocery/extensions/context_extensions.dart';
+import 'package:grocery/utils/currency_utils.dart';
 import 'package:grocery/widgets/neo_card.dart';
-import 'package:intl/intl.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -15,12 +15,6 @@ class CartListBottomSheet extends StatefulWidget {
 }
 
 class _CartListBottomSheetState extends State<CartListBottomSheet> {
-  late final _currencyFormat = NumberFormat.currency(
-    locale: Localizations.localeOf(context).languageCode,
-    symbol: context.l10n.prefixMoneySymbol,
-    decimalDigits: 2,
-  );
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -72,7 +66,7 @@ class _CartListBottomSheetState extends State<CartListBottomSheet> {
                                     overflow: .ellipsis,
                                   ),
                                   Text(
-                                    '${item.quantity} • ${_currencyFormat.format(item.price)}',
+                                    '${item.quantity} • ${CurrencyUtils.getFormattedLocalizedPrice(context, item.price)}',
                                     style: TextStyle(fontSize: 12),
                                   ),
                                 ],

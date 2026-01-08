@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:grocery/daos/cart_dao.dart';
 import 'package:grocery/extensions/context_extensions.dart';
 import 'package:grocery/services/emoji_suggestion_service.dart';
+import 'package:grocery/utils/currency_utils.dart';
 import 'package:grocery/utils/currency_input_formatter.dart';
 import 'package:grocery/widgets/neo_card.dart';
 import 'package:grocery/widgets/neo_field.dart';
+import 'package:intl/intl.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -55,7 +57,7 @@ class _AddCartItemBottomSheetState extends State<AddCartItemBottomSheet> {
 
     if (name.isEmpty || priceText.isEmpty) return;
 
-    final price = double.tryParse(priceText.replaceAll(',', '.')) ?? 0.0;
+    final price = CurrencyUtils.tryParseCurrencyStringToDouble(priceText);
     final locale = Localizations.localeOf(context).languageCode;
     final emoji = EmojiSuggestionService.instance.suggestEmoji(
       name,
@@ -118,7 +120,15 @@ class _AddCartItemBottomSheetState extends State<AddCartItemBottomSheet> {
                 controller: _priceController,
                 keyboardType: TextInputType.number,
                 prefixText: context.l10n.prefixMoneySymbol,
-                inputFormatters: [CurrencyInputFormatter()],
+                inputFormatters: [
+                  CurrencyInputFormatter(
+                    formatter: NumberFormat.currency(
+                      locale: Localizations.localeOf(context).languageCode,
+                      symbol: '',
+                    ),
+                  ),
+                ],
+                maxLength: 12,
               ),
               SizedBox(height: 16),
               NeoCard(

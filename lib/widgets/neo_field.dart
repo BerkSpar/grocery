@@ -10,6 +10,7 @@ class NeoField extends StatefulWidget {
   final TextInputType? keyboardType;
   final String? prefixText;
   final List<TextInputFormatter>? inputFormatters;
+  final int? maxLength;
 
   const NeoField({
     super.key,
@@ -21,6 +22,7 @@ class NeoField extends StatefulWidget {
     this.keyboardType,
     this.prefixText,
     this.inputFormatters,
+    this.maxLength,
   });
 
   @override
@@ -75,6 +77,7 @@ class _NeoFieldState extends State<NeoField> {
         focusNode: _focusNode,
         keyboardType: widget.keyboardType,
         inputFormatters: widget.inputFormatters,
+        maxLength: widget.maxLength,
         decoration: InputDecoration(
           hintText: widget.hintText,
           prefixIcon: widget.prefixText != null
@@ -83,12 +86,16 @@ class _NeoFieldState extends State<NeoField> {
                   child: Text(widget.prefixText!),
                 )
               : null,
-          prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
+          prefixIconConstraints: const BoxConstraints(
+            minWidth: 0,
+            minHeight: 0,
+          ),
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 16,
             vertical: 12,
           ),
           border: InputBorder.none,
+          counterText: '',
         ),
       ),
     );
