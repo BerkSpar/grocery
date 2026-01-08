@@ -1,6 +1,6 @@
 {
   "@@locale": "en",
-  "appTitle": "Grocery",
+  "appTitle": "Cartly",
   "emptyListMessage": "You don't have any items in\nyour shopping list yet",
   "add": "add",
   "shoppingList": "Shopping list",

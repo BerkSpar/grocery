@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:grocery/app_widget.dart';
+import 'package:cartly/app_widget.dart';
 
 void main() {
   runApp(const GroceryApp());

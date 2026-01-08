@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
-import 'package:grocery/database/cart_table.dart';
-import 'package:grocery/database/helpers.dart';
+import 'package:cartly/database/cart_table.dart';
+import 'package:cartly/database/helpers.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'cart_item_table.dart';
@@ -17,7 +17,7 @@ class AppDatabase extends _$AppDatabase {
 
   static QueryExecutor _openConnection() {
     return driftDatabase(
-      name: 'grocery_database',
+      name: 'cartly_database',
       native: const DriftNativeOptions(
         databaseDirectory: getApplicationSupportDirectory,
       ),

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:grocery/daos/cart_dao.dart';
-import 'package:grocery/database/database.dart';
-import 'package:grocery/extensions/context_extensions.dart';
-import 'package:grocery/models/product.dart';
-import 'package:grocery/views/cart/scanner_screen.dart';
-import 'package:grocery/views/cart/widgets/add_cart_item_bottom_sheet.dart';
-import 'package:grocery/views/cart/widgets/barcode_scanner_button.dart';
-import 'package:grocery/views/cart/widgets/cart_list_bottom_sheet.dart';
-import 'package:grocery/views/cart/widgets/cart_summary.dart';
-import 'package:grocery/views/cart/widgets/close_cart_button.dart';
-import 'package:grocery/views/cart/widgets/next_items_list.dart';
-import 'package:grocery/views/cart/widgets/timer_header.dart';
+import 'package:cartly/daos/cart_dao.dart';
+import 'package:cartly/database/database.dart';
+import 'package:cartly/extensions/context_extensions.dart';
+import 'package:cartly/models/product.dart';
+import 'package:cartly/views/cart/scanner_screen.dart';
+import 'package:cartly/views/cart/widgets/add_cart_item_bottom_sheet.dart';
+import 'package:cartly/views/cart/widgets/barcode_scanner_button.dart';
+import 'package:cartly/views/cart/widgets/cart_list_bottom_sheet.dart';
+import 'package:cartly/views/cart/widgets/cart_summary.dart';
+import 'package:cartly/views/cart/widgets/close_cart_button.dart';
+import 'package:cartly/views/cart/widgets/next_items_list.dart';
+import 'package:cartly/views/cart/widgets/timer_header.dart';
 import 'package:provider/provider.dart';
 
 class CartScreen extends StatefulWidget {

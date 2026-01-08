@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:grocery/daos/cart_dao.dart';
-import 'package:grocery/extensions/context_extensions.dart';
-import 'package:grocery/widgets/neo_card.dart';
+import 'package:cartly/daos/cart_dao.dart';
+import 'package:cartly/extensions/context_extensions.dart';
+import 'package:cartly/widgets/neo_card.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
 

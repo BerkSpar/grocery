@@ -1,5 +1,5 @@
 import 'package:drift/drift.dart';
-import 'package:grocery/database/database.dart';
+import 'package:cartly/database/database.dart';
 
 class CartDAO {
   late AppDatabase _database;

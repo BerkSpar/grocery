@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:grocery/daos/cart_dao.dart';
-import 'package:grocery/views/home/widgets/cart_home_summary.dart';
-import 'package:grocery/views/home/widgets/cart_item_options_bottom_sheet.dart';
-import 'package:grocery/views/home/widgets/cart_items_list.dart';
-import 'package:grocery/views/home/widgets/create_cart_item_bottom_sheet.dart';
-import 'package:grocery/views/home/widgets/open_cart_button.dart';
+import 'package:cartly/daos/cart_dao.dart';
+import 'package:cartly/views/home/widgets/cart_home_summary.dart';
+import 'package:cartly/views/home/widgets/cart_item_options_bottom_sheet.dart';
+import 'package:cartly/views/home/widgets/cart_items_list.dart';
+import 'package:cartly/views/home/widgets/create_cart_item_bottom_sheet.dart';
+import 'package:cartly/views/home/widgets/open_cart_button.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
