@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:grocery/extensions/context_extensions.dart';
+import 'package:grocery/utils/currency_utils.dart';
 import 'package:grocery/views/cart/cart_screen.dart';
 import 'package:grocery/widgets/neo_card.dart';
-import 'package:intl/intl.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class CartHomeSummary extends StatefulWidget {
@@ -15,12 +15,6 @@ class CartHomeSummary extends StatefulWidget {
 }
 
 class _CartHomeSummaryState extends State<CartHomeSummary> {
-  late final _currencyFormat = NumberFormat.currency(
-    locale: Localizations.localeOf(context).languageCode,
-    symbol: context.l10n.prefixMoneySymbol,
-    decimalDigits: 2,
-  );
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -41,7 +35,10 @@ class _CartHomeSummaryState extends State<CartHomeSummary> {
               children: [
                 Text(context.l10n.totalInCart),
                 Text(
-                  _currencyFormat.format(widget.totalValue),
+                  CurrencyUtils.getFormattedLocalizedPrice(
+                    context,
+                    widget.totalValue,
+                  ),
                   style: TextStyle(fontSize: 32, fontWeight: .bold),
                 ),
               ],

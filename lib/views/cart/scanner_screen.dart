@@ -71,7 +71,17 @@ class _ScannerScreenState extends State<ScannerScreen>
       backgroundColor: Colors.white,
       body: Stack(
         children: [
-          MobileScanner(onDetect: _handleBarcode),
+          MobileScanner(
+            onDetect: _handleBarcode,
+            controller: MobileScannerController(
+              formats: [
+                BarcodeFormat.ean13,
+                BarcodeFormat.ean8,
+                BarcodeFormat.upcA,
+                BarcodeFormat.upcE,
+              ],
+            ),
+          ),
           CustomPaint(size: Size.infinite, painter: _ScannerOverlayPainter()),
           Center(
             child: Column(

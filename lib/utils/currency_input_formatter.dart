@@ -1,25 +1,23 @@
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 class CurrencyInputFormatter extends TextInputFormatter {
+  final NumberFormat formatter;
+
+  CurrencyInputFormatter({required this.formatter});
+
   @override
   TextEditingValue formatEditUpdate(
     TextEditingValue oldValue,
     TextEditingValue newValue,
   ) {
-    if (newValue.text.isEmpty) {
-      return newValue;
-    }
+    if (newValue.text.isEmpty) return newValue;
 
-    String digitsOnly = newValue.text.replaceAll(RegExp(r'[^\d]'), '');
+    final digitsOnly = newValue.text.replaceAll(RegExp(r'[^\d]'), '');
+    if (digitsOnly.isEmpty) return const TextEditingValue(text: '');
 
-    if (digitsOnly.isEmpty) {
-      return TextEditingValue(text: '');
-    }
-
-    int value = int.parse(digitsOnly);
-    double doubleValue = value / 100;
-
-    String formatted = doubleValue.toStringAsFixed(2).replaceAll('.', ',');
+    final value = int.parse(digitsOnly);
+    final formatted = formatter.format(value / 100).trim();
 
     return TextEditingValue(
       text: formatted,

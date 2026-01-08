@@ -42,6 +42,8 @@ class _CartScreenState extends State<CartScreen> {
 
     if (product == null) return;
 
+    if (!mounted) return;
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
