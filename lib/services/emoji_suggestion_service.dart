@@ -46,7 +46,10 @@ class EmojiSuggestionService {
     return null;
   }
 
-  String? _searchByFuzzyMatch(String normalized, Map<String, String> keywordMap) {
+  String? _searchByFuzzyMatch(
+    String normalized,
+    Map<String, String> keywordMap,
+  ) {
     const int threshold = 2;
     String? bestMatch;
     int bestDistance = threshold + 1;
