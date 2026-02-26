@@ -6,8 +6,8 @@ import 'package:cartly/daos/cart_dao.dart';
 import 'package:cartly/views/home/home_screen.dart';
 import 'package:provider/provider.dart';
 
-class GroceryApp extends StatelessWidget {
-  const GroceryApp({super.key});
+class CartlyApp extends StatelessWidget {
+  const CartlyApp({super.key});
 
   @override
   Widget build(BuildContext context) {

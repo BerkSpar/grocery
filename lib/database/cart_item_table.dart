@@ -1,5 +1,5 @@
-import 'package:drift/drift.dart';
 import 'package:cartly/database/cart_table.dart';
+import 'package:drift/drift.dart';
 
 class CartItem extends Table {
   IntColumn get id => integer().autoIncrement()();
